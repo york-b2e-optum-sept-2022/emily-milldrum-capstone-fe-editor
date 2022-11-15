@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {IProcess} from "../../_interfaces/IProcess";
 import {Subject, take, takeUntil} from "rxjs";
 import {ProcessService} from "../../services/process.service";
+import {ProcessInputComponent} from "../process-input/process-input.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-process-list',
@@ -13,11 +15,12 @@ export class ProcessListComponent implements OnInit {
   errorMessage: string | null = null;
   onDestroy = new Subject();
 
-  constructor(private processService: ProcessService) {
+  constructor(private processService: ProcessService, private modalService: NgbModal) {
     this.processService.$processList.pipe(takeUntil(this.onDestroy)).subscribe(
       processList => {this.processList = processList
       console.log(processList)}
     )
+    this.modalService = modalService;
     // this.processService.$processList.pipe(takeUntil(this.onDestroy)).subscribe(
     //   processList => this.processList = processList
     // );
@@ -45,4 +48,14 @@ export class ProcessListComponent implements OnInit {
     this.onDestroy.complete();
   }
 
+
+
+  public open(modal: any): void {
+    this.modalService.open(modal);
+  }
+
+  openThis() {
+    const modalRef = this.modalService.open(ProcessInputComponent);
+    // modalRef.componentInstance.name = 'World';
+  }
 }

@@ -8,6 +8,11 @@ body {
 .container{
   padding-top: 2rem;
 }
+.centering{
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
 
 .close-button, .modify-buttons{
   display: flex;

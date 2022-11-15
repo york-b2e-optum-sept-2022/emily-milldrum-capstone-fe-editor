@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import * as Process from "process";
+import {Component, Input, OnInit} from '@angular/core';
 import {ProcessService} from "../../services/process.service";
 import {Subject, takeUntil} from "rxjs";
 import {ERROR} from "../../_enums/ERROR";
-import {InlineFontsProcessor} from "@angular-devkit/build-angular/src/utils/index-file/inline-fonts";
-import {IProcessNew} from "../../_interfaces/IProcess";
+import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-process-input',
@@ -13,7 +12,9 @@ import {IProcessNew} from "../../_interfaces/IProcess";
 })
 export class ProcessInputComponent implements OnInit {
   title: string = "";
+  discontinued: boolean = false;
   errorMessage: string | null = null;
+  @Input()process: IProcess | null = null;
   onDestroy = new Subject();
 
   processNew: IProcessNew = {
@@ -21,7 +22,9 @@ export class ProcessInputComponent implements OnInit {
     discontinued: false
   }
 
-  constructor(private processService: ProcessService) {
+  constructor(private processService: ProcessService, private modalService: NgbModal) {
+    this.modalService = modalService;
+
     this.processService.$processError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage)
   }
 
@@ -37,13 +40,22 @@ export class ProcessInputComponent implements OnInit {
     if (this.title == ""){
       this.processService.$processError.next(ERROR.PROCESS_TITLE)
     } else {
-      this.processNew.title = this.title
+      this.processNew.title = this.title;
+      this.processNew.discontinued = this.discontinued;
       this.processService.createProcess(this.processNew)
       this.processService.$processError.next(null)
+      this.closeThis();
     }
   }
+
+  //unsubscribing
   ngOnDestroy(): void {
     this.onDestroy.next(null);
     this.onDestroy.complete();
+  }
+
+  //for closing the modal
+  closeThis() {
+    this.modalService.dismissAll()
   }
 }

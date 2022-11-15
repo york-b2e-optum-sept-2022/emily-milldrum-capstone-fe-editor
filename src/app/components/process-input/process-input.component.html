@@ -4,15 +4,8 @@
     <div class="container">
         <div class="card shadow">
           <div class="card-body">
-<!--            <div *ngIf="!product" class="form-check d-flex justify-content-center">-->
-<!--              <h3 class="text-center pt-3">Create New Product</h3>-->
-<!--            </div>-->
-<!--            <div *ngIf="product" class="form-check d-flex justify-content-center">-->
-<!--              <h3 class="text-center pt-3">Update Product</h3>-->
-<!--            </div>-->
-
             <div class="close-button">
-            <button class="btn btn-dark" (click)="onCancel()">
+            <button class="btn btn-dark" (click)="closeThis()">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
                    viewBox="0 0 16 16">
                 <path
@@ -20,11 +13,23 @@
               </svg>
             </button>
             </div>
-            <div>Create New Process</div>
+            <div *ngIf="!process" class="form-check d-flex justify-content-center">
+              <h3 class="text-center pt-3">Create New Product   </h3>
+            </div>
+            <div *ngIf="process" class="form-check d-flex justify-content-center">
+              <h3 class="text-center pt-3">Update Product</h3>
+            </div>
 
             <div class="input-group mb-3">
               <span class="input-group-text">Title</span>
               <input type="text" class="form-control" [(ngModel)]="title">
+            </div>
+            <div>
+              <input class="form-check-input" type="checkbox" id="finishedCheckbox" [(ngModel)]="discontinued">
+              <label class="form-check-label" for="finishedCheckbox">
+                <h5>Discontinue?</h5>
+              </label>
+
             </div>
 
               <button class="btn btn-light" (click)="onCreate()">Create</button>
