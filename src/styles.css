@@ -9,10 +9,16 @@ body {
   padding-top: 2rem;
 }
 
-.close-button{
+.close-button, .modify-buttons{
   display: flex;
   justify-content: flex-end;
 }
+
+
+#modify-buttons{
+  justify-self: flex-end;
+}
+
 #title-style, #currentprocess-style{
   font-family: Georgia;
   font-size: xx-large;
@@ -28,3 +34,4 @@ body {
   font-variant: small-caps;
   vertical-align: center;
 }
+

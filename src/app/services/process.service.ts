@@ -58,4 +58,19 @@ export class ProcessService {
     })
 
   }
+
+  deleteProcess(processId: number) {
+    this.httpService.deleteProcess(processId).pipe(first()).subscribe({
+      next: () => {
+        let newProcessList: IProcess[] = [...this.$processList.getValue()];
+          this.$processList.next(
+            newProcessList.filter(process => process.id !== processId)
+            );
+      },
+      error: (err) => {
+        console.log(err)
+        this.$processError.next(ERROR.RESPONSES_HTTP_ERROR)
+      }
+    })
+  }
 }
