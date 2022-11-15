@@ -1,13 +1,25 @@
 <div class="container">
 
-<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+<ngb-accordion *ngIf="process.discontinued == false" #acc="ngbAccordion" activeIds="ngb-panel-0">
   <ngb-panel>
     <ng-template ngbPanelTitle>
-      <span>&#9733; <b>{{process.title}}</b> &#9733;</span>
+      <span id="currentprocess-style"><b>{{process.title}}</b></span>
     </ng-template>
     <ng-template ngbPanelContent>
       {{process.id}} info goes here
     </ng-template>
   </ngb-panel>
 </ngb-accordion>
+
+
+  <ngb-accordion *ngIf="process.discontinued == true" #acc="ngbAccordion" activeIds="ngb-panel-5">
+    <ngb-panel>
+      <ng-template ngbPanelTitle>
+        <span id="discontinued-style" >Discontinued: <b>{{process.title}}</b></span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        {{process.id}} info goes here
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
 </div>

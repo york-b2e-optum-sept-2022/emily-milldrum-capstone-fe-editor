@@ -17,7 +17,8 @@ export class ProcessInputComponent implements OnInit {
   onDestroy = new Subject();
 
   processNew: IProcessNew = {
-    title: ""
+    title: "",
+    discontinued: false
   }
 
   constructor(private processService: ProcessService) {
@@ -31,14 +32,12 @@ export class ProcessInputComponent implements OnInit {
 
   }
 
+  //create a new process with default discontinued as false
   onCreate() {
     if (this.title == ""){
       this.processService.$processError.next(ERROR.PROCESS_TITLE)
     } else {
-
-        this.processNew = {
-        title: this.title
-      }
+      this.processNew.title = this.title
       this.processService.createProcess(this.processNew)
       this.processService.$processError.next(null)
     }

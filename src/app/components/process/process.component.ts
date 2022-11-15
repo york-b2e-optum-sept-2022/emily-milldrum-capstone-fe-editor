@@ -10,7 +10,8 @@ export class ProcessComponent implements OnInit {
 
   @Input() process: IProcess = {
     id: 0,
-    title: ""
+    title: "",
+    discontinued: false,
   };
   constructor() { }
 

@@ -13,7 +13,7 @@ body {
   display: flex;
   justify-content: flex-end;
 }
-#title-style{
+#title-style, #currentprocess-style{
   font-family: Georgia;
   font-size: xx-large;
   color: darkslategrey;
@@ -21,3 +21,10 @@ body {
   vertical-align: center;
 }
 
+#discontinued-style{
+  font-family: Georgia;
+  font-size: xx-large;
+  color: darkgrey;
+  font-variant: small-caps;
+  vertical-align: center;
+}
