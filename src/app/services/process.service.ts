@@ -43,4 +43,19 @@ export class ProcessService {
   }
 
 
+  createProcess(processNew: IProcessNew) {
+
+    this.httpService.createProcess(processNew).pipe(first()).subscribe({
+      next: (process) =>{
+        let newProcessList: IProcess[] = [...this.$processList.getValue()];
+        newProcessList.push(process);
+        this.$processList.next(newProcessList)
+      },
+      error: (err) => {
+        console.log(err)
+        this.$processError.next(ERROR.PROCESS_ADD_ERROR)
+      }
+    })
+
+  }
 }
