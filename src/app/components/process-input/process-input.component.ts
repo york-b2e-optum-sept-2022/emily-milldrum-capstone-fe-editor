@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./process-input.component.css']
 })
 export class ProcessInputComponent implements OnInit {
+  title: string = "";
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  onCancel() {
+    
+  }
+
+  onCreate() {
+    
+  }
 }

@@ -11,6 +11,8 @@ import { StageListComponent } from './components/stage-list/stage-list.component
 import { ResponseComponent } from './components/response/response.component';
 import { ResponseListComponent } from './components/response-list/response-list.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -25,9 +27,11 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     ResponseListComponent,
     NavbarComponent
   ],
-  imports: [
-    BrowserModule
-  ],
+    imports: [
+        BrowserModule,
+        NgbModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

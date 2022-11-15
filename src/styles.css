@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background-color: grey;
+  background-image: url("https://storage.needpix.com/rsynced_images/old-paper-texture-background.jpg");
+  opacity: 0.75;
+}
+
+.container{
+  padding-top: 2rem;
+}
