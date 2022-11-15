@@ -73,4 +73,31 @@ export class ProcessService {
       }
     })
   }
+
+  updateProcess(processEdit: IProcess) {
+    this.httpService.updateProcess(processEdit).pipe(first()).subscribe({
+      next: (newProc) => {
+          let processList: IProcess[] = [...this.$processList.getValue()];
+          this.$processList.next(
+            processList.map((product) => {
+              if (product.id !== processEdit.id) {
+                return product;
+              }
+              return newProc;
+            })
+          );
+          this.$processToUpdate.next(null);
+          this.resetErrorMessages();
+        },
+          error: (err) => {
+          console.error(err);
+          this.$processError.next(ERROR.PROCESSES_HTTP_ERROR)
+        }
+      })
+  }
+
+  private resetErrorMessages() {
+    this.$processError.next(null)
+
+  }
 }

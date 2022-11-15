@@ -12,6 +12,10 @@ body {
   padding-top: 2rem;
   display: flex;
   justify-content: center;
+  font-family: Georgia;
+  font-size: large;
+  color: darkslategrey;
+  font-variant: small-caps;
 }
 
 .close-button, .modify-buttons{
@@ -20,8 +24,16 @@ body {
 }
 
 
-#modify-buttons{
+.modify-buttons{
   justify-self: flex-end;
+  padding: 1rem;
+}
+
+.font-green{
+  font-family: Georgia;
+  font-size: large;
+  color: darkslategrey;
+  font-variant: small-caps;
 }
 
 #title-style, #currentprocess-style{
