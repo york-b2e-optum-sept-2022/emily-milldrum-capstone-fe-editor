@@ -18,9 +18,14 @@ export class ProcessService {
   $processToCreate = new BehaviorSubject<IProcessNew | null>(null);
 
   constructor( private httpService: HttpService) {
+    this.getAllProcess();
+  }
+
+  getAllProcess(){
     this.httpService.getProcessList().pipe(first()).subscribe({
-      next: processList => {this.processList = processList;
+      next: (processList) => {this.processList = processList;
         this.$processList.next(processList)
+        console.log(this.processList)
       },
       error: (err) => {
         console.error(err);
@@ -28,4 +33,14 @@ export class ProcessService {
       }
     });
   }
+
+  getProcessList(){
+    this.httpService.getProcessList().pipe(first()).subscribe({
+      next: (processList) =>{
+        this.$processList.next(processList)
+    }
+    })
+  }
+
+
 }

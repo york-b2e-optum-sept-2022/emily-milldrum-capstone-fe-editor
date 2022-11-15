@@ -1,1 +1,13 @@
-<p>process works!</p>
+<div class="container">
+
+<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+  <ngb-panel>
+    <ng-template ngbPanelTitle>
+      <span>&#9733; <b>{{process.title}}</b> &#9733;</span>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      {{process.id}} info goes here
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+</div>
