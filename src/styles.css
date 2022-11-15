@@ -8,3 +8,16 @@ body {
 .container{
   padding-top: 2rem;
 }
+
+.close-button{
+  display: flex;
+  justify-content: flex-end;
+}
+#title-style{
+  font-family: Georgia;
+  font-size: xx-large;
+  color: darkslategrey;
+  font-variant: small-caps;
+  vertical-align: center;
+}
+
