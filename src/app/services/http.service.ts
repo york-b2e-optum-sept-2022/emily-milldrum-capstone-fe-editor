@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {Observable} from "rxjs";
+import {IStage, IStageNew} from "../_interfaces/IStage";
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,17 @@ export class HttpService {
   }
   deleteProcess(processId: number) {
     return this.httpClient.delete('http://localhost:8080/api/process/' + processId) as Observable<IProcess[]>;
+  }
+
+  createStage(stage: IStageNew) {
+    return this.httpClient.post('http://localhost:8080/api/stage', stage) as Observable<IStage>;
+  }
+
+  getStageList() {
+    return this.httpClient.get('http://localhost:8080/api/stage') as Observable<IStage[]>
+  }
+
+  getStagesById(stageId: number) {
+    return this.httpClient.get('http://localhost:8080/api/stage' + stageId) as Observable<IStage[]>
   }
 }

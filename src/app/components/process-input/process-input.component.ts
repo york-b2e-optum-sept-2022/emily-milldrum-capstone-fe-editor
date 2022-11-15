@@ -52,10 +52,6 @@ export class ProcessInputComponent implements OnInit {
     }
   }
 
-  onCancel() {
-
-  }
-
   //create a new process with default discontinued as false
   onCreate() {
     if (this.title == ""){

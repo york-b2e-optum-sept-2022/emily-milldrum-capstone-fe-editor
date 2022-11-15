@@ -24,6 +24,10 @@
             <span class="input-group-text">Question</span>
             <input type="text" class="form-control" [(ngModel)]="question">
           </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Order</span>
+            <input type="text" class="form-control" [(ngModel)]="order">
+          </div>
 
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"[(ngModel)]="type">
@@ -35,15 +39,16 @@
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-            <label class="form-check-label" for="inlineRadio2">Multiple Choice: Single Select</label>
+            <label class="form-check-label" for="inlineRadio3">Multiple Choice: Single Select</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
-            <label class="form-check-label" for="inlineRadio2">Multiple Choice: Multiple Select</label>
+            <label class="form-check-label" for="inlineRadio4">Multiple Choice: Multiple Select</label>
           </div>
           <div>
 
           </div>
+          <div class="container">{{errorMessage}}</div>
           <ng-container *ngIf="!stage">
             <button class="btn btn-light" (click)="onCreate()">Create</button>
           </ng-container>

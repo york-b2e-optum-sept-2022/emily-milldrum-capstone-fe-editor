@@ -3,6 +3,7 @@ import {HttpService} from "./http.service";
 import {BehaviorSubject, first} from "rxjs";
 import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
+import {IStage, IStageNew} from "../_interfaces/IStage";
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +13,17 @@ export class ProcessService {
   processList: IProcess[] = [];
   $processList = new BehaviorSubject<IProcess[]>([])
   $processError = new BehaviorSubject<string | null>(null)
-
-  //TODO add/update
   $processToUpdate = new BehaviorSubject<IProcess | null>(null);
+  //TODO add/update
   $processToCreate = new BehaviorSubject<IProcessNew | null>(null);
+
+  stageList: IStage[] = [];
+  $stageError = new BehaviorSubject<string | null>(null);
+  $stageList = new BehaviorSubject<IStage[]>([])
 
   constructor( private httpService: HttpService) {
     this.getAllProcess();
+    this.getAllStages();
   }
 
   getAllProcess(){
@@ -34,17 +39,20 @@ export class ProcessService {
     });
   }
 
-  getProcessList(){
-    this.httpService.getProcessList().pipe(first()).subscribe({
-      next: (processList) =>{
-        this.$processList.next(processList)
-    }
-    })
+  getAllStages(){
+    this.httpService.getStageList().pipe(first()).subscribe({
+      next: (stageList) => {this.stageList = stageList;
+        this.$stageList.next(stageList)
+        console.log(this.processList)
+      },
+      error: (err) => {
+        console.error(err);
+        this.$processError.next(ERROR.PROCESSES_HTTP_ERROR);
+      }
+    });
   }
 
-
   createProcess(processNew: IProcessNew) {
-
     this.httpService.createProcess(processNew).pipe(first()).subscribe({
       next: (process) =>{
         let newProcessList: IProcess[] = [...this.$processList.getValue()];
@@ -56,7 +64,6 @@ export class ProcessService {
         this.$processError.next(ERROR.PROCESS_ADD_ERROR)
       }
     })
-
   }
 
   deleteProcess(processId: number) {
@@ -98,6 +105,22 @@ export class ProcessService {
 
   private resetErrorMessages() {
     this.$processError.next(null)
+
+  }
+
+  createStage(stageNew: IStageNew) {
+    console.log(stageNew)
+    this.httpService.createStage(stageNew).pipe(first()).subscribe({
+      next: (stage) =>{
+        let newStageList: IStage[] = [...this.$stageList.getValue()];
+        newStageList.push(stage);
+        this.$stageList.next(newStageList)
+      },
+      error: (err) => {
+        console.log(err)
+        this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
+      }
+    })
 
   }
 }
