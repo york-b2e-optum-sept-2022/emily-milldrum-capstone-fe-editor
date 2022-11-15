@@ -15,6 +15,7 @@ export class ProcessComponent implements OnInit {
     id: 0,
     title: "",
     discontinued: false,
+    stages: [],
   };
   deleteAlert: string | null = null;
   constructor(private processService: ProcessService, private modalService: NgbModal) {

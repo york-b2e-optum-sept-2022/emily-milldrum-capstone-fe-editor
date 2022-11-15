@@ -22,11 +22,13 @@ export class ProcessInputComponent implements OnInit {
       id: 0,
       title: "",
       discontinued: false,
+      stages: [],
     }
 
   processNew: IProcessNew = {
     title: "",
-    discontinued: false
+    discontinued: false,
+    stages: [],
   }
 
 
@@ -67,16 +69,6 @@ export class ProcessInputComponent implements OnInit {
     }
   }
 
-  //unsubscribing
-  ngOnDestroy(): void {
-    this.onDestroy.next(null);
-    this.onDestroy.complete();
-  }
-
-  //for closing the modal
-  closeThis() {
-    this.modalService.dismissAll()
-  }
 
   onUpdate() {
     if(this.process == null){
@@ -90,10 +82,23 @@ export class ProcessInputComponent implements OnInit {
       id: this.process.id,
       title: this.title,
       discontinued: this.discontinued,
+      stages: this.process.stages,
     }
       this.processService.updateProcess(this.processEdit)
       this.closeThis();
     }
 
   }
+
+  //unsubscribing
+  ngOnDestroy(): void {
+    this.onDestroy.next(null);
+    this.onDestroy.complete();
+  }
+
+  //for closing the modal
+  closeThis() {
+    this.modalService.dismissAll()
+  }
+
 }

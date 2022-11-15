@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {IStage} from "../../_interfaces/IStage";
 
 @Component({
   selector: 'app-stage',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StageComponent implements OnInit {
 
+  @Input()stage!: IStage;
   constructor() { }
 
   ngOnInit(): void {
