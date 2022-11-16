@@ -4,7 +4,8 @@ import {ProcessService} from "../../services/process.service";
 import {ProcessInputComponent} from "../process-input/process-input.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {StageInputComponent} from "../stage-input/stage-input.component";
-import {first} from "rxjs";
+import {IStage} from "../../_interfaces/IStage";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-process',
@@ -19,12 +20,29 @@ export class ProcessComponent implements OnInit {
     discontinued: false,
     stages: [],
   };
+
+  stageList: IStage[] =[];
+
+  onDestroy = new Subject();
+
   deleteAlert: string | null = null;
   constructor(private processService: ProcessService, private modalService: NgbModal) {
+    // this.processService.$stageList.subscribe(
+    //   stageList => {this.stageList = stageList
+    //   }
+    // )
+
 
   }
 
   ngOnInit(): void {
+    this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(
+      stageList => this.stageList = stageList
+    );
+
+    this.processService.getStageById(this.process.id)
+    console.log(this.process.id)
+
   }
 
   //confirm delete
@@ -55,4 +73,10 @@ export class ProcessComponent implements OnInit {
     this.processService.$processToUpdate.next(this.process)
     this.modalService.open(StageInputComponent);
   }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next(null);
+    this.onDestroy.complete();
+  }
+
 }

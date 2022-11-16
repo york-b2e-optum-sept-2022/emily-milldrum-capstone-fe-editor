@@ -25,17 +25,24 @@ export class StageInputComponent implements OnInit {
   stageEdit: IStage =
     {
       id: 0,
+      processId: 0,
       question: "",
       order: 0,
       type: STAGETYPE.textbox
     }
 
   stageNew: IStageNew = {
+    processId: 0,
     question: "",
     order: 0,
     type: STAGETYPE.textbox
   }
-  process: IProcess | null = null;
+  process: IProcess = {
+    id: 0,
+    title: "",
+    discontinued: false,
+    stages: [],
+  };
 
   constructor(private modalService: NgbModal, private processService: ProcessService) {
 
@@ -44,6 +51,8 @@ export class StageInputComponent implements OnInit {
     this.processService.$processToUpdate.pipe(first()).subscribe(process => {
       if (process != null) {
         this.process = process;
+        console.log("selected process")
+        console.log(this.process)
       }
     })
   }
@@ -54,12 +63,16 @@ export class StageInputComponent implements OnInit {
   //create a new stage
   onCreate() {
     console.log('creat clicked')
+    console.log(this.stageNew)
+    console.log(this.process)
     if (this.question == ""){
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
-    } else if ((this.type == null) || (this.type == undefined)){
+    } else if ((this.type == null) || (this.type == undefined)) {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
+    } else if (this.process == null) {
+      this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
     } else {
-      console.log(this.stageNew)
+
       // switch (this.type){
       //   case "option1":
       //     this.type = STAGETYPE.textbox
@@ -73,10 +86,10 @@ export class StageInputComponent implements OnInit {
       //   case "option4":
       //     this.type = STAGETYPE.multipleCheck
       // }
+      this.stageNew.processId = this.process.id
       this.stageNew.question = this.question;
       this.stageNew.order = this.order;
       this.stageNew.type = this.type;
-
       this.processService.createStage(this.stageNew);
       this.processService.$stageError.next(null)
       this.closeThis();

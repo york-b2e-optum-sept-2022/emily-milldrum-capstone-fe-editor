@@ -4,6 +4,7 @@ import {BehaviorSubject, first} from "rxjs";
 import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {IStage, IStageNew} from "../_interfaces/IStage";
+import {STAGETYPE} from "../_enums/STAGETYPE";
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,15 @@ export class ProcessService {
   //TODO add/update
   $processToCreate = new BehaviorSubject<IProcessNew | null>(null);
 
+  stage: IStage =   {
+    id: 0,
+    processId: 0,
+    question: "",
+    order: 0,
+    type: STAGETYPE.textbox
+  };
+
+  stageListEdit: IStage[] = [];
   stageList: IStage[] = [];
   $stageError = new BehaviorSubject<string | null>(null);
   $stageList = new BehaviorSubject<IStage[]>([])
@@ -50,6 +60,21 @@ export class ProcessService {
         this.$processError.next(ERROR.PROCESSES_HTTP_ERROR);
       }
     });
+  }
+
+  getStageById(processId: number){
+    this.httpService.getStagesById(processId).pipe(first()).subscribe({
+      next: (stageList) => {this.stageList = stageList;
+        this.$stageList.next(stageList)
+        console.log(this.processList)
+      },
+      error: (err) => {
+        console.error(err);
+        this.$processError.next(ERROR.PROCESSES_HTTP_ERROR);
+      }
+    });
+
+    return this.stageList;
   }
 
   createProcess(processNew: IProcessNew) {
@@ -110,7 +135,9 @@ export class ProcessService {
 
   createStage(stageNew: IStageNew) {
     console.log(stageNew)
+
     this.httpService.createStage(stageNew).pipe(first()).subscribe({
+
       next: (stage) =>{
         let newStageList: IStage[] = [...this.$stageList.getValue()];
         newStageList.push(stage);
@@ -122,5 +149,5 @@ export class ProcessService {
       }
     })
 
-  }
+   }
 }

@@ -18,7 +18,7 @@ export class ProcessListComponent implements OnInit {
   constructor(private processService: ProcessService, private modalService: NgbModal) {
     this.processService.$processList.pipe(takeUntil(this.onDestroy)).subscribe(
       processList => {this.processList = processList
-      console.log(processList)}
+      }
     )
     this.modalService = modalService;
     // this.processService.$processList.pipe(takeUntil(this.onDestroy)).subscribe(

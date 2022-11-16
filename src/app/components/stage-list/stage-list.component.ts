@@ -3,6 +3,8 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {StageInputComponent} from "../stage-input/stage-input.component";
 import {IStage} from "../../_interfaces/IStage";
 import {IProcess} from "../../_interfaces/IProcess";
+import {Subject, takeUntil} from "rxjs";
+import {ProcessService} from "../../services/process.service";
 
 @Component({
   selector: 'app-stage-list',
@@ -13,11 +15,21 @@ export class StageListComponent implements OnInit {
   stageList: IStage[] =[]
   //TODO
   @Input() process!: IProcess;
+  onDestroy = new Subject();
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private processService: ProcessService) {
+    this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(
+      stageList => {this.stageList = stageList
+      }
+    )
+  }
 
   ngOnInit(): void {
-    console.log('init this process')
-    console.log(this.process)
   }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next(null);
+    this.onDestroy.complete();
+  }
+
 }

@@ -34,6 +34,17 @@
         {{process.id}}
         {{process.discontinued}}
 
+        <app-stage *ngFor="let stages of process.stages"
+                      [stages2]="stages">
+
+        </app-stage>
+
+        process.stages
+        <app-stage *ngFor="let stages of process.stages"
+                   [stages2]="stages">
+
+        </app-stage>
+
         <div class="card shadow">
           <div class="card-body">
             <div class="container">

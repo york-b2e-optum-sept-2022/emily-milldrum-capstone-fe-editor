@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IStage} from "../../_interfaces/IStage";
-import {IProcess} from "../../_interfaces/IProcess";
+import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
+import {first} from "rxjs";
+import {ProcessService} from "../../services/process.service";
 
 @Component({
   selector: 'app-stage',
@@ -10,8 +12,13 @@ import {IProcess} from "../../_interfaces/IProcess";
 export class StageComponent implements OnInit {
 
   @Input()stage!: IStage;
+  @Input()stages2!: IStage;
   @Input()process!: IProcess;
-  constructor() { }
+  selectedProcess: IProcess | null = null;
+
+  constructor(private processService: ProcessService) {
+
+  }
 
   ngOnInit(): void {
   }

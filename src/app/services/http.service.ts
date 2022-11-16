@@ -33,7 +33,7 @@ export class HttpService {
     return this.httpClient.get('http://localhost:8080/api/stage') as Observable<IStage[]>
   }
 
-  getStagesById(stageId: number) {
-    return this.httpClient.get('http://localhost:8080/api/stage' + stageId) as Observable<IStage[]>
+  getStagesById(processId: number) {
+    return this.httpClient.get('http://localhost:8080/api/stage/byId/' + processId) as Observable<IStage[]>
   }
 }
