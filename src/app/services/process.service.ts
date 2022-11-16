@@ -58,7 +58,7 @@ export class ProcessService {
   }
 
   getAllStages(){
-    this.httpService.getAllStages().pipe(first()).subscribe({
+    this.httpService.getStageList().pipe(first()).subscribe({
       next: (stageList) => {this.stageList = stageList;
         this.$stageList.next(stageList)
         console.log(this.processList)

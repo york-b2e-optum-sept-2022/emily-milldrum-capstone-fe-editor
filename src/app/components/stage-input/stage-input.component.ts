@@ -20,7 +20,7 @@ export class StageInputComponent implements OnInit {
   question: string = "";
   type: any; //TODO change any
   order: number = 0;
-
+  isEditingStage: boolean = false;
 
   stageEdit: IStage =
     {
@@ -58,6 +58,11 @@ export class StageInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.stage !== null){
+      this.question = this.stage.question;
+      this.type = this.stage.type;
+      this.order = this.stage.order;
+    }
   }
 
   //create a new stage
@@ -73,19 +78,6 @@ export class StageInputComponent implements OnInit {
       this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
     } else {
 
-      // switch (this.type){
-      //   case "option1":
-      //     this.type = STAGETYPE.textbox
-      //     break;
-      //   case "option2":
-      //     this.type = STAGETYPE.booleanTF
-      //     break;
-      //   case "option3":
-      //     this.type = STAGETYPE.multipleRadio
-      //     break;
-      //   case "option4":
-      //     this.type = STAGETYPE.multipleCheck
-      // }
       this.stageNew.processId = this.process.id
       this.stageNew.question = this.question;
       this.stageNew.order = this.order;
@@ -99,6 +91,8 @@ export class StageInputComponent implements OnInit {
 
 
   onUpdate() {
+    console.log(this.process.stage)
+    this.isEditingStage = true;
     // if(this.process == null){
     //   this.processService.$processError.next(ERROR.PROCESS_NULL)
     // } else if (this.title == ""){
@@ -114,7 +108,7 @@ export class StageInputComponent implements OnInit {
     //   }
     //   this.processService.updateProcess(this.processEdit)
     //   this.closeThis();
-    // }
+   // }
 
   }
 
@@ -125,9 +119,18 @@ export class StageInputComponent implements OnInit {
     this.onDestroy.complete();
   }
 
-  //for closing the modal
+  //for closing the editting option
+  deleteAlert: string | null = null;
+
   closeThis() {
-    this.modalService.dismissAll()
+    this.isEditingStage = false;
   }
 
+  onDelete() {
+    console.log('delete stage works')
+  }
+
+  onDeleteConfirm() {
+    console.log('delete confirmed')
+  }
 }

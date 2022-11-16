@@ -31,40 +31,13 @@
 
       </ng-template>
       <ng-template ngbPanelContent>
-        {{process.id}}
-        {{process.discontinued}}
-
-<!--        <app-stage *ngFor="let stages of process.stage"-->
-<!--                      [stages2]="stages">-->
-
-<!--        </app-stage>-->
-
-        process.stages
+        process id: {{process.id}}<br>
+        discontinued: {{process.discontinued}}<br>
+        stages: <ng-container *ngIf="process.stage !== undefined">
         <app-stage *ngFor="let stages of process.stage"
-                   [stages2]="stages">
-
+                   [stage]="stages">
         </app-stage>
-
-<!--        <div class="card shadow">-->
-<!--          <div class="card-body">-->
-<!--            <div class="container">-->
-<!--              <div class="centering"><svg (click)="openThis()" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"-->
-<!--                                          class="bi bi-plus-circle" viewBox="0 0 16 16">-->
-<!--                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>-->
-<!--                <path-->
-<!--                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>-->
-<!--              </svg>-->
-
-<!--              </div>-->
-<!--              <div class="centering">-->
-<!--                Create Stage-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-        <app-stage-list [process]="process"></app-stage-list>
-
+      </ng-container>
 
       </ng-template>
     </ngb-panel>
@@ -102,10 +75,13 @@
         </div>
       </ng-template>
       <ng-template ngbPanelContent>
-        {{process.id}}
-        {{process.discontinued}}
+        process id: {{process.id}}<br>
+        discontinued: {{process.discontinued}}<br>
+        stages: <app-stage *ngFor="let stage in process.stage"
+      [stage] ="stage">
 
-        <app-stage-list></app-stage-list>
+      </app-stage>
+        {{process.stage}}<br>
 
       </ng-template>
     </ngb-panel>

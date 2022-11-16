@@ -31,8 +31,12 @@
               </label>
             </div>
 
-            <app-stage-list></app-stage-list>
-            <app-stage-input></app-stage-input>
+            <ng-container *ngIf="process !== null">
+            <app-stage-input *ngFor="let stages of process.stage"
+                       [stage]="stages">
+            </app-stage-input>
+            </ng-container>
+
 
             <ng-container *ngIf="!process">
               <button class="btn btn-light" (click)="onCreate()">Create</button>

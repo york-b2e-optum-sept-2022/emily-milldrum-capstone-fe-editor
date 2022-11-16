@@ -60,19 +60,19 @@ export class ProcessComponent implements OnInit {
   //update existing process
   onUpdate() {
     this.processService.$processToUpdate.next(this.process);
-    this.modalService.open(ProcessInputComponent);
-
+    this.processService.$isCreating.next(true)
+    //this.modalService.open(ProcessInputComponent);
   }
 
-  public open(modal: any): void {
-    this.modalService.open(modal);
-  }
+  // public open(modal: any): void {
+  //   this.modalService.open(modal);
+  // }
 
-  //open stage input in modal
-  openThis() {
-    this.processService.$processToUpdate.next(this.process)
-    this.modalService.open(StageInputComponent);
-  }
+  // //open stage input in modal
+  // openThis() {
+  //   this.processService.$processToUpdate.next(this.process)
+  //   this.modalService.open(StageInputComponent);
+  // }
 
   ngOnDestroy(): void {
     this.onDestroy.next(null);
