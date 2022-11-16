@@ -5,7 +5,6 @@ import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {IStage, IStageNew} from "../_interfaces/IStage";
 import {STAGETYPE} from "../_enums/STAGETYPE";
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -163,7 +162,7 @@ export class ProcessService {
     }
     // /
     //assign incoming stage to IStage with Id?
-    this.stage.id = uuidv4;
+    this.stage.id = Math.random();
     this.stage.processId = stageNew.processId;
     this.stage.type = stageNew.type
     this.stage.question = stageNew.question

@@ -27,14 +27,12 @@ import {HttpClientModule} from "@angular/common/http";
     ResponseComponent,
     ResponseListComponent,
     NavbarComponent,
-    uuid,
   ],
     imports: [
         BrowserModule,
         NgbModule,
         FormsModule,
         HttpClientModule,
-      uuid,
     ],
   providers: [],
   bootstrap: [AppComponent]
