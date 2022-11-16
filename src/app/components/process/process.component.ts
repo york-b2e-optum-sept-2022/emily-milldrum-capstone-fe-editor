@@ -3,6 +3,8 @@ import {IProcess} from "../../_interfaces/IProcess";
 import {ProcessService} from "../../services/process.service";
 import {ProcessInputComponent} from "../process-input/process-input.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {StageInputComponent} from "../stage-input/stage-input.component";
+import {first} from "rxjs";
 
 @Component({
   selector: 'app-process',
@@ -42,5 +44,15 @@ export class ProcessComponent implements OnInit {
     this.processService.$processToUpdate.next(this.process);
     this.modalService.open(ProcessInputComponent);
 
+  }
+
+  public open(modal: any): void {
+    this.modalService.open(modal);
+  }
+
+  //open stage input in modal
+  openThis() {
+    this.processService.$processToUpdate.next(this.process)
+    this.modalService.open(StageInputComponent);
   }
 }

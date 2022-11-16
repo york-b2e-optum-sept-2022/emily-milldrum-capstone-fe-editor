@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
-import {Subject, takeUntil} from "rxjs";
+import {first, Subject, takeUntil} from "rxjs";
 import {IStage, IStageNew} from "../../_interfaces/IStage";
 import {STAGETYPE} from "../../_enums/STAGETYPE";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -35,10 +35,17 @@ export class StageInputComponent implements OnInit {
     order: 0,
     type: STAGETYPE.textbox
   }
+  process: IProcess | null = null;
+
   constructor(private modalService: NgbModal, private processService: ProcessService) {
 
     this.processService.$stageError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
 
+    this.processService.$processToUpdate.pipe(first()).subscribe(process => {
+      if (process != null) {
+        this.process = process;
+      }
+    })
   }
 
   ngOnInit(): void {
