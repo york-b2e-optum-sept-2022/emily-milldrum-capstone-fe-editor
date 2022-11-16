@@ -1,4 +1,4 @@
-import {IStage} from "./IStage";
+import {IStage, IStageNew} from "./IStage";
 
 export interface IProcess {
   id: number;

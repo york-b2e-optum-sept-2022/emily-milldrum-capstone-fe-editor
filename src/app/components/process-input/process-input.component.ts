@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProcessService} from "../../services/process.service";
-import {first, Subject, takeUntil} from "rxjs";
+import {first, isEmpty, Subject, takeUntil} from "rxjs";
 import {ERROR} from "../../_enums/ERROR";
 import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -54,9 +54,10 @@ export class ProcessInputComponent implements OnInit {
 
   //create a new process with default discontinued as false
   onCreate() {
-    if (this.title == ""){
+    console.log(this.processNew.stage)
+    if (this.title == "") {
       this.processService.$processError.next(ERROR.PROCESS_TITLE)
-    } else {
+    }else {
       this.processNew.title = this.title;
       this.processNew.discontinued = this.discontinued;
       this.processService.createProcess(this.processNew)
@@ -102,6 +103,7 @@ export class ProcessInputComponent implements OnInit {
   closeThis() {
     //this.modalService.dismissAll()
     this.processService.$isCreating.next(false)
+    this.processService.$processToUpdate.next(null);
   }
 
 }

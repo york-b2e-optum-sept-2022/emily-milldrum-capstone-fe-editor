@@ -19,27 +19,29 @@ export class StageInputComponent implements OnInit {
   onDestroy = new Subject();
   question: string = "";
   type: any; //TODO change any
-  order: number = 0;
+  stageOrder: number = 0;
   isEditingStage: boolean = false;
   deleteAlert: string | null = null;
   choiceInput: string = "";
 
-  choiceList: string[] = [];
+  stageOptions: string[] = [];
 
   stageEdit: IStage =
     {
       id: 0,
       processId: 0,
       question: "",
-      order: 0,
-      type: STAGETYPE.textbox
+      stageOrder: 0,
+      type: STAGETYPE.textbox,
+      stageOptions: []
     }
 
   stageNew: IStageNew = {
     processId: 0,
     question: "",
-    order: 0,
-    type: STAGETYPE.textbox
+    stageOrder: 0,
+    type: STAGETYPE.textbox,
+    stageOptions: [],
   }
   process: IProcess = {
     id: 0,
@@ -65,15 +67,19 @@ export class StageInputComponent implements OnInit {
     if (this.stage !== null){
       this.question = this.stage.question;
       this.type = this.stage.type;
-      this.order = this.stage.order;
+      this.stageOrder = this.stage.stageOrder;
     }
   }
 
+  //add a response choice
+  addChoice() {
+    this.stageOptions.push(this.choiceInput);
+  }
   //create a new stage
   onCreate() {
-    console.log('creat clicked')
-    console.log(this.stageNew)
+    console.log('create clicked')
     console.log(this.process)
+    console.log(this.stageOptions)
     if (this.question == ""){
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
     } else if ((this.type == null) || (this.type == undefined)) {
@@ -84,8 +90,9 @@ export class StageInputComponent implements OnInit {
 
       this.stageNew.processId = this.process.id
       this.stageNew.question = this.question;
-      this.stageNew.order = this.order;
+      this.stageNew.stageOrder = this.stageOrder;
       this.stageNew.type = this.type;
+      this.stageNew.stageOptions = this.stageOptions;
       this.processService.createStage(this.stageNew);
       this.processService.$processToUpdate.next(null);
       this.processService.$stageError.next(null)
@@ -143,9 +150,4 @@ export class StageInputComponent implements OnInit {
     this.deleteAlert = null;
   }
 
-  addChoice() {
-    console.log('adding this')
-    console.log(this.choiceInput)
-    this.choiceList.push(this.choiceInput);
-  }
 }

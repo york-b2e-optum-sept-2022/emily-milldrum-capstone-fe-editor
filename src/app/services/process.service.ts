@@ -5,6 +5,7 @@ import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {IStage, IStageNew} from "../_interfaces/IStage";
 import {STAGETYPE} from "../_enums/STAGETYPE";
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -21,22 +22,20 @@ export class ProcessService {
   $processList = new BehaviorSubject<IProcess[]>([])
   $processError = new BehaviorSubject<string | null>(null)
   $processToUpdate = new BehaviorSubject<IProcess | null>(null);
-  //TODO add/update
-  $processToCreate = new BehaviorSubject<IProcessNew | null>(null);
 
   stage: IStage =   {
     id: 0,
     processId: 0,
     question: "",
-    order: 0,
-    type: STAGETYPE.textbox
+    stageOrder: 0,
+    type: STAGETYPE.textbox,
+    stageOptions: []
   };
 
-  stageListEdit: IStage[] = [];
+  stageListCreate: IStageNew[] | null = null;
   stageList: IStage[] = [];
   $stageError = new BehaviorSubject<string | null>(null);
   $stageList = new BehaviorSubject<IStage[]>([])
-
   $isCreating = new BehaviorSubject<boolean>(false)
 
   constructor( private httpService: HttpService) {
@@ -88,6 +87,19 @@ export class ProcessService {
   }
 
   createProcess(processNew: IProcessNew) {
+
+    console.log(processNew.stage)
+
+    //if stage is empty throw this error
+   if(!this.stageListCreate){
+     this.$processError.next(ERROR.PROCESS_ADD_STAGE)
+
+   } else {     //set stages
+     processNew.stage = this.stageListCreate;
+     console.log(processNew.stage)
+   }
+
+
     this.httpService.createProcess(processNew).pipe(first()).subscribe({
       next: (process) =>{
         let newProcessList: IProcess[] = [...this.$processList.getValue()];
@@ -144,30 +156,45 @@ export class ProcessService {
   }
 
   createStage(stageNew: IStageNew) {
+    console.log('create ps: stagenew')
     console.log(stageNew)
-    this.stage.id = 5;
+    if(this.stageListCreate == null){
+      this.stageListCreate = [];
+    }
+    // /
+    //assign incoming stage to IStage with Id?
+    this.stage.id = uuidv4;
+    this.stage.processId = stageNew.processId;
     this.stage.type = stageNew.type
     this.stage.question = stageNew.question
-    this.stage.order = stageNew.order
-    //this.stageListEdit.push(this.stage);
-
-    let curProcess = this.$processToUpdate.getValue();
-    if (curProcess !== null){
-    this.process.id = curProcess.id
-      this.process.discontinued = curProcess.discontinued
-      this.process.title = curProcess.title
-      this.process.stage = curProcess.stage
-      this.process.stage.push(this.stage)
-    }
-    console.log(curProcess)
-    //curProcess?.stages
+    this.stage.stageOrder = stageNew.stageOrder
+    this.stageListCreate.push(this.stage);
+    //
+    // let curProcess = this.$processToUpdate.getValue();
     // if (curProcess !== null){
-    //   curProcess.stage = this.stageListEdit;
-    // }
-    console.log(this.stageListEdit)
-    console.log(curProcess)
-    console.log(this.process)
-    this.httpService.updateProcess(this.process)
+    // this.process.id = curProcess.id
+    //   this.process.discontinued = curProcess.discontinued
+    //   this.process.title = curProcess.title
+    //   this.process.stage = curProcess.stage
+    //   this.process.stage.push(this.stage)
+
+    //  this.stageListCreate.push(stageNew);
+
+
+    console.log('create ps: stageListCrreate')
+    console.log(this.stageListCreate)
+
+    // console.log('create ps: curProcess')
+    // console.log(curProcess)
+    // //curProcess?.stages
+    // // if (curProcess !== null){
+    // //   curProcess.stage = this.stageListEdit;
+    // // }
+    // console.log('create ps: stageListEdit')
+    // console.log(this.stageListCreate)
+    // console.log('create ps: this.process')
+    // console.log(this.process)
+    // this.httpService.updateProcess(this.process)
 
    // this.process.stage.push(stageNew)
 

@@ -1,4 +1,4 @@
-<ng-container *ngIf="isEditingStage">
+<ng-container *ngIf="isEditingStage || !stage ">
   <div class="card-body">
     <div class="container">
       <div class="card shadow">
@@ -24,8 +24,8 @@
             <input type="text" class="form-control" [(ngModel)]="question">
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text">Order</span>
-            <input type="number" class="form-control" [(ngModel)]="order">
+            <span class="input-group-text">Stage Order</span>
+            <input type="number" class="form-control" [(ngModel)]="stageOrder">
           </div>
 
           <div class="form-group">
@@ -58,7 +58,7 @@
                 <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
               </div>
             </div>
-            <div *ngFor="let choice of choiceList" class="col-8">
+            <div *ngFor="let choice of stageOptions" class="col-8">
               <div class="custom-control custom-radio custom-control-inline">
                 <input name="radio" id="radio_0" type="radio" class="custom-control-input" value="{{choice}}">
                 <label for="{{choice}}" class="custom-control-label">{{choice.toString()}}</label>
@@ -92,7 +92,7 @@
               <input type="text" class="form-control" [(ngModel)]="choiceInput">
               <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
             </div>
-            <div *ngFor="let choice of choiceList" class="col-8">
+            <div *ngFor="let choice of stageOptions" class="col-8">
               <div class="custom-control custom-checkbox custom-control-inline">
 <!--                checked="checked" for pre-checked-->
                 <input name="checkbox" id="checkbox_0" type="checkbox" class="custom-control-input" value="{{choice}}">
@@ -127,7 +127,7 @@
   id: {{stage.id}}<br>
   question: {{stage.question}}<br>
   type: {{stage.type}}<br>
-  order: {{stage.order}}<br>
+  order: {{stage.stageOrder}}<br>
 
 
           <div class="modify-buttons">

@@ -2,15 +2,17 @@ import {IQuestionType} from "./IQuestionType";
 import {STAGETYPE} from "../_enums/STAGETYPE";
 
 export interface IStage {
-  id: number;
+  id?: number;
   processId: number;
   question: string;
-  order: number;
+  stageOrder: number;
   type: STAGETYPE;
+  stageOptions: string[];
 }
 export interface IStageNew {
   processId: number;
   question: string;
-  order: number;
+  stageOrder: number;
   type: STAGETYPE;
+  stageOptions: string[];
 }
