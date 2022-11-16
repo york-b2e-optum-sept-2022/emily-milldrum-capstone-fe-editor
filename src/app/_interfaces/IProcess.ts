@@ -4,11 +4,11 @@ export interface IProcess {
   id: number;
   title: string;
   discontinued: boolean;
-  stages: IStage[];
+  stage: IStage[];
 }
 
 export interface IProcessNew {
   title: string;
   discontinued: boolean;
-  stages: IStage[];
+  stage: IStage[];
 }

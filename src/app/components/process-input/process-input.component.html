@@ -29,8 +29,11 @@
               <label class="form-check-label" id="title-style" for="finishedCheckbox">
                 <h5> | Discontinue?</h5>
               </label>
-
             </div>
+
+            <app-stage-list></app-stage-list>
+            <app-stage-input></app-stage-input>
+
             <ng-container *ngIf="!process">
               <button class="btn btn-light" (click)="onCreate()">Create</button>
             </ng-container>

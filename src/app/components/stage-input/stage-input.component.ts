@@ -41,7 +41,7 @@ export class StageInputComponent implements OnInit {
     id: 0,
     title: "",
     discontinued: false,
-    stages: [],
+    stage: [],
   };
 
   constructor(private modalService: NgbModal, private processService: ProcessService) {

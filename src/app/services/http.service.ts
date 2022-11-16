@@ -36,4 +36,8 @@ export class HttpService {
   getStagesById(processId: number) {
     return this.httpClient.get('http://localhost:8080/api/stage/byId/' + processId) as Observable<IStage[]>
   }
+
+  getStagesByProcess() {
+
+  }
 }

@@ -11,6 +11,12 @@ import {STAGETYPE} from "../_enums/STAGETYPE";
 })
 export class ProcessService {
 
+  process: IProcess =   {
+    id: 0,
+    title: "",
+    discontinued: false,
+    stage: [],
+  };
   processList: IProcess[] = [];
   $processList = new BehaviorSubject<IProcess[]>([])
   $processError = new BehaviorSubject<string | null>(null)
@@ -31,6 +37,8 @@ export class ProcessService {
   $stageError = new BehaviorSubject<string | null>(null);
   $stageList = new BehaviorSubject<IStage[]>([])
 
+  $isCreating = new BehaviorSubject<boolean>(false)
+
   constructor( private httpService: HttpService) {
     this.getAllProcess();
     this.getAllStages();
@@ -50,7 +58,7 @@ export class ProcessService {
   }
 
   getAllStages(){
-    this.httpService.getStageList().pipe(first()).subscribe({
+    this.httpService.getAllStages().pipe(first()).subscribe({
       next: (stageList) => {this.stageList = stageList;
         this.$stageList.next(stageList)
         console.log(this.processList)
@@ -63,18 +71,20 @@ export class ProcessService {
   }
 
   getStageById(processId: number){
-    this.httpService.getStagesById(processId).pipe(first()).subscribe({
-      next: (stageList) => {this.stageList = stageList;
-        this.$stageList.next(stageList)
-        console.log(this.processList)
-      },
-      error: (err) => {
-        console.error(err);
-        this.$processError.next(ERROR.PROCESSES_HTTP_ERROR);
-      }
-    });
+    //TODO turned off
 
-    return this.stageList;
+    // this.httpService.getStagesById(processId).pipe(first()).subscribe({
+    //   next: (stageList) => {this.stageList = stageList;
+    //     this.$stageList.next(stageList)
+    //     console.log(this.processList)
+    //   },
+    //   error: (err) => {
+    //     console.error(err);
+    //     this.$processError.next(ERROR.PROCESSES_HTTP_ERROR);
+    //   }
+    // });
+    //
+    // return this.stageList;
   }
 
   createProcess(processNew: IProcessNew) {
@@ -135,19 +145,44 @@ export class ProcessService {
 
   createStage(stageNew: IStageNew) {
     console.log(stageNew)
+    this.stage.id = 5;
+    this.stage.type = stageNew.type
+    this.stage.question = stageNew.question
+    this.stage.order = stageNew.order
+    //this.stageListEdit.push(this.stage);
 
-    this.httpService.createStage(stageNew).pipe(first()).subscribe({
+    let curProcess = this.$processToUpdate.getValue();
+    if (curProcess !== null){
+    this.process.id = curProcess.id
+      this.process.discontinued = curProcess.discontinued
+      this.process.title = curProcess.title
+      this.process.stage = curProcess.stage
+      this.process.stage.push(this.stage)
+    }
+    console.log(curProcess)
+    //curProcess?.stages
+    // if (curProcess !== null){
+    //   curProcess.stage = this.stageListEdit;
+    // }
+    console.log(this.stageListEdit)
+    console.log(curProcess)
+    console.log(this.process)
+    this.httpService.updateProcess(this.process)
 
-      next: (stage) =>{
-        let newStageList: IStage[] = [...this.$stageList.getValue()];
-        newStageList.push(stage);
-        this.$stageList.next(newStageList)
-      },
-      error: (err) => {
-        console.log(err)
-        this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
-      }
-    })
+   // this.process.stage.push(stageNew)
+
+    // this.httpService.createStage(stageNew).pipe(first()).subscribe({
+    //
+    //   next: (stage) =>{
+    //     let newStageList: IStage[] = [...this.$stageList.getValue()];
+    //     newStageList.push(stage);
+    //     this.$stageList.next(newStageList)
+    //   },
+    //   error: (err) => {
+    //     console.log(err)
+    //     this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
+    //   }
+    // })
 
    }
 }

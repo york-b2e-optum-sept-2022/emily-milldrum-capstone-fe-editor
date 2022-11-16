@@ -22,13 +22,13 @@ export class ProcessInputComponent implements OnInit {
       id: 0,
       title: "",
       discontinued: false,
-      stages: [],
+      stage: [],
     }
 
   processNew: IProcessNew = {
     title: "",
     discontinued: false,
-    stages: [],
+    stage: [],
   }
 
 
@@ -61,6 +61,8 @@ export class ProcessInputComponent implements OnInit {
       this.processNew.discontinued = this.discontinued;
       this.processService.createProcess(this.processNew)
       this.processService.$processError.next(null)
+
+      this.processService.$isCreating.next(false)
       this.closeThis();
     }
   }
@@ -78,10 +80,12 @@ export class ProcessInputComponent implements OnInit {
       id: this.process.id,
       title: this.title,
       discontinued: this.discontinued,
-      stages: this.process.stages,
+      stage: this.process.stage,
     }
       this.processService.updateProcess(this.processEdit)
       this.closeThis();
+
+      this.processService.$isCreating.next(false)
     }
 
   }
@@ -94,7 +98,8 @@ export class ProcessInputComponent implements OnInit {
 
   //for closing the modal
   closeThis() {
-    this.modalService.dismissAll()
+    //this.modalService.dismissAll()
+    this.processService.$isCreating.next(false)
   }
 
 }

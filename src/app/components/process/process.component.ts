@@ -18,7 +18,7 @@ export class ProcessComponent implements OnInit {
     id: 0,
     title: "",
     discontinued: false,
-    stages: [],
+    stage: [],
   };
 
   stageList: IStage[] =[];
