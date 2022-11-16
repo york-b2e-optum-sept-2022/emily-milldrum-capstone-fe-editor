@@ -63,6 +63,7 @@ export class ProcessInputComponent implements OnInit {
       this.processService.$processError.next(null)
 
       this.processService.$isCreating.next(false)
+      this.processService.$processToUpdate.next(null);
       this.closeThis();
     }
   }
@@ -86,6 +87,7 @@ export class ProcessInputComponent implements OnInit {
       this.closeThis();
 
       this.processService.$isCreating.next(false)
+      this.processService.$processToUpdate.next(null);
     }
 
   }

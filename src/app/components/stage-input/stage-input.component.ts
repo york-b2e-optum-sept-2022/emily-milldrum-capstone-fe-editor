@@ -21,6 +21,10 @@ export class StageInputComponent implements OnInit {
   type: any; //TODO change any
   order: number = 0;
   isEditingStage: boolean = false;
+  deleteAlert: string | null = null;
+  choiceInput: string = "";
+
+  choiceList: string[] = [];
 
   stageEdit: IStage =
     {
@@ -83,6 +87,7 @@ export class StageInputComponent implements OnInit {
       this.stageNew.order = this.order;
       this.stageNew.type = this.type;
       this.processService.createStage(this.stageNew);
+      this.processService.$processToUpdate.next(null);
       this.processService.$stageError.next(null)
       this.closeThis();
     }
@@ -109,6 +114,7 @@ export class StageInputComponent implements OnInit {
     //   this.processService.updateProcess(this.processEdit)
     //   this.closeThis();
    // }
+    //this.processService.$processToUpdate.next(null);
 
   }
 
@@ -120,17 +126,26 @@ export class StageInputComponent implements OnInit {
   }
 
   //for closing the editting option
-  deleteAlert: string | null = null;
-
   closeThis() {
     this.isEditingStage = false;
+    this.processService.$processToUpdate.next(null);
   }
 
+  //confirm delete
   onDelete() {
-    console.log('delete stage works')
+    this.deleteAlert = "Are you sure you wish to delete?\n" +
+      "Deleting a stage will remove all answers, if you wish to save previous responses update this field instead"
   }
 
+  //execute delete after confirm
   onDeleteConfirm() {
-    console.log('delete confirmed')
+    this.processService.deleteProcess(this.process.id);
+    this.deleteAlert = null;
+  }
+
+  addChoice() {
+    console.log('adding this')
+    console.log(this.choiceInput)
+    this.choiceList.push(this.choiceInput);
   }
 }
