@@ -73,7 +73,13 @@ export class StageInputComponent implements OnInit {
 
   //add a response choice
   addChoice() {
-    this.stageOptions.push(this.choiceInput);
+    if (this.choiceInput == "" || null){
+      this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
+    } else {
+      this.stageOptions.push(this.choiceInput);
+      this.processService.$stageError.next(null)
+    }
+
   }
   //create a new stage
   onCreate() {
@@ -86,7 +92,10 @@ export class StageInputComponent implements OnInit {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
     } else if (this.process == null) {
       this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
-    } else {
+    } else if (this.stageOptions.length < 2){
+      this.processService.$stageError.next(ERROR.STAGE_OPTION_ADD_MORE)
+    }
+    else {
 
       this.stageNew.processId = this.process.id
       this.stageNew.question = this.question;

@@ -46,7 +46,6 @@ export class ProcessService {
     this.httpService.getProcessList().pipe(first()).subscribe({
       next: (processList) => {this.processList = processList;
         this.$processList.next(processList)
-        console.log(this.processList)
       },
       error: (err) => {
         console.error(err);
@@ -59,7 +58,6 @@ export class ProcessService {
     this.httpService.getStageList().pipe(first()).subscribe({
       next: (stageList) => {this.stageList = stageList;
         this.$stageList.next(stageList)
-        console.log(this.processList)
       },
       error: (err) => {
         console.error(err);
@@ -86,19 +84,17 @@ export class ProcessService {
   }
 
   createProcess(processNew: IProcessNew) {
-
-    console.log(processNew.stage)
-
     //if stage is empty throw this error
    if(!this.stageListCreate){
      this.$processError.next(ERROR.PROCESS_ADD_STAGE)
 
    } else {     //set stages
      processNew.stage = this.stageListCreate;
+     console.log('ps after pushing stages to process')
      console.log(processNew.stage)
    }
-
-
+   console.log('ps what gets sent to http service')
+   console.log(processNew);
     this.httpService.createProcess(processNew).pipe(first()).subscribe({
       next: (process) =>{
         let newProcessList: IProcess[] = [...this.$processList.getValue()];
@@ -162,7 +158,7 @@ export class ProcessService {
     }
     // /
     //assign incoming stage to IStage with Id?
-    this.stage.id = Math.random();
+    this.stage.id = Math.random() * 10000;
     this.stage.processId = stageNew.processId;
     this.stage.type = stageNew.type
     this.stage.question = stageNew.question
