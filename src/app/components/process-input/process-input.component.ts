@@ -4,6 +4,7 @@ import {first, isEmpty, Subject, takeUntil} from "rxjs";
 import {ERROR} from "../../_enums/ERROR";
 import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {IStage} from "../../_interfaces/IStage";
 
 @Component({
   selector: 'app-process-input',
@@ -16,6 +17,7 @@ export class ProcessInputComponent implements OnInit {
   errorMessage: string | null = null;
   @Input()process: IProcess | null = null;
   onDestroy = new Subject();
+  stageList: IStage[] | null = null;
 
   processEdit: IProcess =
     {
@@ -35,12 +37,19 @@ export class ProcessInputComponent implements OnInit {
   constructor(private processService: ProcessService, private modalService: NgbModal) {
     this.modalService = modalService;
 
-    this.processService.$processError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage)
+    this.processService.$processError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message)
 
     //get product to update
     this.processService.$processToUpdate.pipe(first()).subscribe(process => {
       if (process != null) {
         this.process = process;
+      }
+    })
+
+    //get product to update
+    this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(stageList => {
+      if (stageList != null) {
+        this.stageList = stageList;
       }
     })
   }
@@ -54,18 +63,15 @@ export class ProcessInputComponent implements OnInit {
 
   //create a new process with default discontinued as false
   onCreate() {
-    console.log(this.processNew.stage)
     if (this.title == "") {
       this.processService.$processError.next(ERROR.PROCESS_TITLE)
     }else {
       this.processNew.title = this.title;
       this.processNew.discontinued = this.discontinued;
-      this.processService.createProcess(this.processNew)
-      this.processService.$processError.next(null)
-
-      this.processService.$isCreating.next(false)
-      this.processService.$processToUpdate.next(null);
-      this.closeThis();
+      if (this.processService.createProcess(this.processNew))
+      {
+        this.closeThis();
+      }
     }
   }
 

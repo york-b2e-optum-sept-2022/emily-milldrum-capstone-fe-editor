@@ -37,10 +37,6 @@ export class HttpService {
     return this.httpClient.get('http://localhost:8080/api/stage/byId/' + processId) as Observable<IStage[]>
   }
 
-  getStagesByProcess() {
-
-  }
-
   deleteStage(stageId: number) {
     return this.httpClient.delete('http://localhost:8080/api/stage/' + stageId) as Observable<IStage[]>;
   }

@@ -38,7 +38,7 @@
             </select>
           </div>
 
-<!--          if selected textbox show this-->
+          <!--          if selected textbox show this-->
           <ng-container *ngIf="type == 'Textbox'">
             <div class="form-group row">
               <label for="textarea" class="col-4 col-form-label">Text Area</label>
@@ -86,24 +86,25 @@
 
           <!--          if selected multi multiple show this-->
           <ng-container *ngIf="type == 'Multiple Choice: Multiple'">
-          <div class="form-group row">
-            <div class="input-group mb-3">
-              <span class="input-group-text">Create Field</span>
-              <input type="text" class="form-control" [(ngModel)]="choiceInput">
-              <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
-            </div>
-            <div *ngFor="let choice of stageOptions" class="col-8">
-              <div class="custom-control custom-checkbox custom-control-inline">
-<!--                checked="checked" for pre-checked-->
-                <input name="checkbox" id="checkbox_0" type="checkbox" class="custom-control-input" value="{{choice}}">
-                <label for="checkbox_0" class="custom-control-label">{{choice.toString()}}</label>
+            <div class="form-group row">
+              <div class="input-group mb-3">
+                <span class="input-group-text">Create Field</span>
+                <input type="text" class="form-control" [(ngModel)]="choiceInput">
+                <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
               </div>
+              <div *ngFor="let choice of stageOptions" class="col-8">
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <!--                checked="checked" for pre-checked-->
+                  <input name="checkbox" id="checkbox_0" type="checkbox" class="custom-control-input"
+                         value="{{choice}}">
+                  <label for="checkbox_0" class="custom-control-label">{{choice.toString()}}</label>
+                </div>
 
+              </div>
             </div>
-          </div>
           </ng-container>
 
-          <div class="container">{{errorMessage}}</div>
+          <div class="centering" id="error-message">{{errorMessage}}</div>
           <ng-container *ngIf="!stage">
             <button class="btn btn-light" (click)="onCreate()">Create</button>
           </ng-container>
@@ -124,10 +125,10 @@
     <div class="container">
       <div class="card shadow">
         <div class="card-body">
-  id: {{stage.id}}<br>
-  question: {{stage.question}}<br>
-  type: {{stage.type}}<br>
-  order: {{stage.stageOrder}}<br>
+          id: {{stage.id}}<br>
+          question: {{stage.question}}<br>
+          type: {{stage.type}}<br>
+          order: {{stage.stageOrder}}<br>
 
 
           <div class="modify-buttons">

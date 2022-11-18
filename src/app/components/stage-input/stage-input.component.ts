@@ -28,7 +28,7 @@ export class StageInputComponent implements OnInit {
   stageEdit: IStage =
     {
       id: 0,
-      processId: 0,
+      //processId: 0,
       question: "",
       stageOrder: 0,
       type: "",
@@ -36,7 +36,7 @@ export class StageInputComponent implements OnInit {
     }
 
   stageNew: IStageNew = {
-    processId: 0,
+    //processId: 0,
     question: "",
     stageOrder: 0,
     type: "",
@@ -92,8 +92,9 @@ export class StageInputComponent implements OnInit {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
     } else if (this.process == null) {
       this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
-    } else if ((this.type == 'Multiple Choice: Single' || 'Multiple Choice: Multiple')
-      && this.stageOptions.length < 2){
+    } else if (this.type == 'Multiple Choice: Single' && this.stageOptions.length < 2){
+      this.processService.$stageError.next(ERROR.STAGE_OPTION_ADD_MORE)
+    } else if (this.type == 'Multiple Choice: Multiple' && this.stageOptions.length < 2) {
       this.processService.$stageError.next(ERROR.STAGE_OPTION_ADD_MORE)
     }
     else {

@@ -4,7 +4,6 @@ import {BehaviorSubject, first} from "rxjs";
 import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {IStage, IStageNew} from "../_interfaces/IStage";
-import {STAGETYPE} from "../_enums/STAGETYPE";
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +23,7 @@ export class ProcessService {
 
   stage: IStage =   {
     id: 0,
-    processId: 0,
+    //processId: 0,
     question: "",
     stageOrder: 0,
     type: "",
@@ -40,7 +39,7 @@ export class ProcessService {
 
   constructor( private httpService: HttpService) {
     this.getAllProcess();
-    this.getAllStages();
+    //this.getAllStages();
   }
 
 
@@ -90,14 +89,14 @@ export class ProcessService {
   //create a new process
   createProcess(processNew: IProcessNew) {
     //if stage is empty throw this error
-   if(!this.stageListCreate){
+   if(this.stageListCreate == null){
      this.$processError.next(ERROR.PROCESS_ADD_STAGE)
-
+     return false;
    } else {     //set stages
      processNew.stage = this.stageListCreate;
      console.log('ps after pushing stages to process')
      console.log(processNew.stage)
-   }
+
    console.log('ps what gets sent to http service')
    console.log(processNew);
     this.httpService.createProcess(processNew).pipe(first()).subscribe({
@@ -111,6 +110,12 @@ export class ProcessService {
         this.$processError.next(ERROR.PROCESS_ADD_ERROR)
       }
     })
+     this.stageListCreate = [];
+     this.$processError.next(null)
+     this.$isCreating.next(false)
+     this.$processToUpdate.next(null);
+     return true;
+   }
   }
 
   //delete an existing process
@@ -166,56 +171,11 @@ export class ProcessService {
     if(this.stageListCreate == null){
       this.stageListCreate = [];
     }
-    // /
-    //assign incoming stage to IStage with Id?
-    this.stage.id = Math.random() * 10000;
-    this.stage.processId = stageNew.processId;
-    this.stage.type = stageNew.type
-    this.stage.question = stageNew.question
-    this.stage.stageOrder = stageNew.stageOrder
-    this.stageListCreate.push(this.stage);
-    //
-    // let curProcess = this.$processToUpdate.getValue();
-    // if (curProcess !== null){
-    // this.process.id = curProcess.id
-    //   this.process.discontinued = curProcess.discontinued
-    //   this.process.title = curProcess.title
-    //   this.process.stage = curProcess.stage
-    //   this.process.stage.push(this.stage)
 
-    //  this.stageListCreate.push(stageNew);
-
-
+    this.stageListCreate.push(stageNew);
+    this.$stageList.next(this.stageListCreate);
     console.log('create ps: stageListCrreate')
     console.log(this.stageListCreate)
-
-    // console.log('create ps: curProcess')
-    // console.log(curProcess)
-    // //curProcess?.stages
-    // // if (curProcess !== null){
-    // //   curProcess.stage = this.stageListEdit;
-    // // }
-    // console.log('create ps: stageListEdit')
-    // console.log(this.stageListCreate)
-    // console.log('create ps: this.process')
-    // console.log(this.process)
-    // this.httpService.updateProcess(this.process)
-
-   // this.process.stage.push(stageNew)
-
-    // this.httpService.createStage(stageNew).pipe(first()).subscribe({
-    //
-    //   next: (stage) =>{
-    //     let newStageList: IStage[] = [...this.$stageList.getValue()];
-    //     newStageList.push(stage);
-    //     this.$stageList.next(newStageList)
-    //   },
-    //   error: (err) => {
-    //     console.log(err)
-    //     this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
-    //   }
-    // })
-
    }
 
 

@@ -1,9 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IProcess} from "../../_interfaces/IProcess";
 import {ProcessService} from "../../services/process.service";
-import {ProcessInputComponent} from "../process-input/process-input.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {StageInputComponent} from "../stage-input/stage-input.component";
 import {IStage} from "../../_interfaces/IStage";
 import {Subject, takeUntil} from "rxjs";
 
