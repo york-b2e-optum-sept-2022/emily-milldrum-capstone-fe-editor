@@ -31,9 +31,7 @@
 
       </ng-template>
       <ng-template ngbPanelContent>
-        process id: {{process.id}}<br>
-        discontinued: {{process.discontinued}}<br>
-        stages: <ng-container *ngIf="process.stage !== undefined">
+        <ng-container *ngIf="process.stage !== undefined">
         <app-stage *ngFor="let stages of process.stage"
                    [stage]="stages">
         </app-stage>
@@ -77,7 +75,7 @@
       <ng-template ngbPanelContent>
         process id: {{process.id}}<br>
         discontinued: {{process.discontinued}}<br>
-        stages: <app-stage *ngFor="let stage in process.stage"
+        stages: <app-stage *ngFor="let stage of process.stage"
       [stage] ="stage">
 
       </app-stage>

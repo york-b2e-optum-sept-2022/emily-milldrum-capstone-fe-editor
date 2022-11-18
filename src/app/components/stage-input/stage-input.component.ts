@@ -1,8 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
+import {IProcess} from "../../_interfaces/IProcess";
 import {first, Subject, takeUntil} from "rxjs";
 import {IStage, IStageNew} from "../../_interfaces/IStage";
-import {STAGETYPE} from "../../_enums/STAGETYPE";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ProcessService} from "../../services/process.service";
 import {ERROR} from "../../_enums/ERROR";
@@ -18,7 +17,7 @@ export class StageInputComponent implements OnInit {
   @Input()stage: IStage | null = null;
   onDestroy = new Subject();
   question: string = "";
-  type: any; //TODO change any
+  type: string = "";
   stageOrder: number = 0;
   isEditingStage: boolean = false;
   deleteAlert: string | null = null;
@@ -32,7 +31,7 @@ export class StageInputComponent implements OnInit {
       processId: 0,
       question: "",
       stageOrder: 0,
-      type: STAGETYPE.textbox,
+      type: "",
       stageOptions: []
     }
 
@@ -40,7 +39,7 @@ export class StageInputComponent implements OnInit {
     processId: 0,
     question: "",
     stageOrder: 0,
-    type: STAGETYPE.textbox,
+    type: "",
     stageOptions: [],
   }
   process: IProcess = {
@@ -78,26 +77,26 @@ export class StageInputComponent implements OnInit {
     } else {
       this.stageOptions.push(this.choiceInput);
       this.processService.$stageError.next(null)
+      console.log(this.choiceInput)
+      console.log(this.stageOptions)
+      console.log(this.stageOptions.length)
     }
 
   }
-  //create a new stage
+  //create a new stage check for question, null process, ensure at least 2 options entered
   onCreate() {
-    console.log('create clicked')
-    console.log(this.process)
-    console.log(this.stageOptions)
+
     if (this.question == ""){
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
     } else if ((this.type == null) || (this.type == undefined)) {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
     } else if (this.process == null) {
       this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
-    } else if (this.stageOptions.length < 2){
+    } else if ((this.type == 'Multiple Choice: Single' || 'Multiple Choice: Multiple')
+      && this.stageOptions.length < 2){
       this.processService.$stageError.next(ERROR.STAGE_OPTION_ADD_MORE)
     }
     else {
-
-      this.stageNew.processId = this.process.id
       this.stageNew.question = this.question;
       this.stageNew.stageOrder = this.stageOrder;
       this.stageNew.type = this.type;
@@ -109,29 +108,27 @@ export class StageInputComponent implements OnInit {
     }
   }
 
+  //edit button clicked
+  onEdit() {
+    this.isEditingStage = true;
+  }
 
 
   onUpdate() {
-    console.log(this.process.stage)
-    this.isEditingStage = true;
-    // if(this.process == null){
-    //   this.processService.$processError.next(ERROR.PROCESS_NULL)
-    // } else if (this.title == ""){
-    //   this.processService.$processError.next(ERROR.PROCESS_TITLE)
-    // }
-    // else
-    // {
-    //   this.processEdit = {
-    //     id: this.process.id,
-    //     title: this.title,
-    //     discontinued: this.discontinued,
-    //     stages: this.process.stages,
-    //   }
-    //   this.processService.updateProcess(this.processEdit)
-    //   this.closeThis();
-   // }
-    //this.processService.$processToUpdate.next(null);
+      if (this.stage == null) {
+        this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
+      } else if(this.question == ""){
+        this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
+      } else {
+        this.stage.question = this.question
+        this.stage.type = this.type
+        this.stage.stageOrder = this.stageOrder
+        this.stage.stageOptions = this.stageOptions
+        this.processService.updateStage(this.stage)
+        console.log(this.stage)
 
+        this.isEditingStage = false;
+    }
   }
 
 
@@ -155,8 +152,14 @@ export class StageInputComponent implements OnInit {
 
   //execute delete after confirm
   onDeleteConfirm() {
-    this.processService.deleteProcess(this.process.id);
-    this.deleteAlert = null;
+    if(this.stage == null){
+      this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
+    } else if (this.stage.id == undefined) {
+      this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
+    } else {
+      this.processService.deleteStage(this.stage.id);
+      this.deleteAlert = null; }
+
   }
 
 }

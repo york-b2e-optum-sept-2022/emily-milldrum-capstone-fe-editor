@@ -27,13 +27,14 @@ export class ProcessService {
     processId: 0,
     question: "",
     stageOrder: 0,
-    type: STAGETYPE.textbox,
+    type: "",
     stageOptions: []
   };
 
   stageListCreate: IStageNew[] | null = null;
   stageList: IStage[] = [];
   $stageError = new BehaviorSubject<string | null>(null);
+  $stageToUpdate = new BehaviorSubject<IStage | null>(null);
   $stageList = new BehaviorSubject<IStage[]>([])
   $isCreating = new BehaviorSubject<boolean>(false)
 
@@ -42,6 +43,8 @@ export class ProcessService {
     this.getAllStages();
   }
 
+
+  //get a list of all processes
   getAllProcess(){
     this.httpService.getProcessList().pipe(first()).subscribe({
       next: (processList) => {this.processList = processList;
@@ -54,6 +57,7 @@ export class ProcessService {
     });
   }
 
+  //get a list of all stages
   getAllStages(){
     this.httpService.getStageList().pipe(first()).subscribe({
       next: (stageList) => {this.stageList = stageList;
@@ -83,6 +87,7 @@ export class ProcessService {
     // return this.stageList;
   }
 
+  //create a new process
   createProcess(processNew: IProcessNew) {
     //if stage is empty throw this error
    if(!this.stageListCreate){
@@ -108,6 +113,7 @@ export class ProcessService {
     })
   }
 
+  //delete an existing process
   deleteProcess(processId: number) {
     this.httpService.deleteProcess(processId).pipe(first()).subscribe({
       next: () => {
@@ -123,6 +129,7 @@ export class ProcessService {
     })
   }
 
+  //update existing process
   updateProcess(processEdit: IProcess) {
     this.httpService.updateProcess(processEdit).pipe(first()).subscribe({
       next: (newProc) => {
@@ -145,11 +152,14 @@ export class ProcessService {
       })
   }
 
+  //rest error messages
   private resetErrorMessages() {
     this.$processError.next(null)
+    this.$stageError.next(null)
 
   }
 
+  //create a new stage
   createStage(stageNew: IStageNew) {
     console.log('create ps: stagenew')
     console.log(stageNew)
@@ -207,4 +217,44 @@ export class ProcessService {
     // })
 
    }
+
+
+   //delete an existing stage
+  deleteStage(id: number) {
+    this.httpService.deleteStage(id).pipe(first()).subscribe({
+      next: () => {
+        let newStageList: IStage[] = [...this.$stageList.getValue()];
+        this.$stageList.next(
+          newStageList.filter(stage => stage.id !== id)
+        );
+      },
+      error: (err) => {
+        console.log(err)
+        this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
+      }
+    })
+  }
+
+  //update an existing stage
+  updateStage(stage: IStage) {
+    this.httpService.updateStage(stage).pipe(first()).subscribe({
+      next: (newStage) => {
+        let stageList: IStage[] = [...this.$stageList.getValue()];
+        this.$stageList.next(
+          stageList.map((incStage) => {
+            if (incStage.id !== stage.id) {
+              return stage;
+            }
+            return newStage;
+          })
+        );
+        this.$stageToUpdate.next(null);
+        this.resetErrorMessages();
+      },
+      error: (err) => {
+        console.error(err);
+        this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
+      }
+    })
+  }
 }

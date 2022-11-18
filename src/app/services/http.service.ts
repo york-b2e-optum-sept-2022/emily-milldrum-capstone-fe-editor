@@ -40,4 +40,12 @@ export class HttpService {
   getStagesByProcess() {
 
   }
+
+  deleteStage(stageId: number) {
+    return this.httpClient.delete('http://localhost:8080/api/stage/' + stageId) as Observable<IStage[]>;
+  }
+
+  updateStage(stage: IStage) {
+    return this.httpClient.put('http://localhost:8080/api/stage/', stage) as Observable<IStage>;
+  }
 }
