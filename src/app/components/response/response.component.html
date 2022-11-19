@@ -1,1 +1,19 @@
-<p>response works!</p>
+<ng-container *ngIf="response !== null">
+  <table  class="table table-light">
+    <tbody>
+    <tr>
+
+      <th scope="row">id: {{response.id}}</th>
+      <div *ngFor="let answer of response.answer">
+<!--        <td>stage question: {{answer.stage.question}}</td>-->
+        <td>answer: {{answer.answer}}</td>
+      </div>
+<!--      <td>{{stage.question}}</td>-->
+<!--      <td> </td>-->
+<!--      <td>{{stage.type}}</td>-->
+
+    </tbody>
+  </table>
+
+
+</ng-container>

@@ -4,6 +4,7 @@ import {BehaviorSubject, first} from "rxjs";
 import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {IStage, IStageNew} from "../_interfaces/IStage";
+import {IResponse} from "../_interfaces/IResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,11 @@ export class ProcessService {
   $stageList = new BehaviorSubject<IStage[]>([])
   $isCreating = new BehaviorSubject<boolean>(false)
 
+
+  $viewResponses = new BehaviorSubject<boolean>(false)
+
+  $responseList = new BehaviorSubject<IResponse[]>([])
+
   constructor( private httpService: HttpService) {
     this.getAllProcess();
     //this.getAllStages();
@@ -69,21 +75,17 @@ export class ProcessService {
     });
   }
 
-  getStageById(processId: number){
-    //TODO turned off
-
-    // this.httpService.getStagesById(processId).pipe(first()).subscribe({
-    //   next: (stageList) => {this.stageList = stageList;
-    //     this.$stageList.next(stageList)
-    //     console.log(this.processList)
-    //   },
-    //   error: (err) => {
-    //     console.error(err);
-    //     this.$processError.next(ERROR.PROCESSES_HTTP_ERROR);
-    //   }
-    // });
-    //
-    // return this.stageList;
+  getResponseList(selectedProcess: IProcess){
+    this.httpService.getResponseListById(selectedProcess.id).pipe(first()).subscribe({
+      next: (responseList) => {
+        this.$responseList.next(responseList)
+        console.log(responseList)
+      },
+      error: (err) => {
+        console.error(err);
+        this.$processError.next(ERROR.PROCESSES_HTTP_ERROR);
+      }
+    });
   }
 
   //create a new process

@@ -1,5 +1,5 @@
-<ng-container *ngIf="!isCreating">
-  <app-navbar></app-navbar>
+<app-navbar></app-navbar>
+<ng-container *ngIf="!isCreating && !viewResponses">
 <div class="container">
 
   <div class="card shadow">
@@ -24,6 +24,28 @@
 </div>
 </ng-container>
 
-<ng-container *ngIf="isCreating">
+<ng-container *ngIf="isCreating && !viewResponses">
+  <div class="container">
+
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="container">
   <app-process-input></app-process-input>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="viewResponses">
+  <div class="container">
+
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="container">
+          <app-response-list></app-response-list>
+        </div>
+      </div>
+    </div>
+  </div>
 </ng-container>

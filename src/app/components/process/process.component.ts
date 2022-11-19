@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IProcess} from "../../_interfaces/IProcess";
 import {ProcessService} from "../../services/process.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {IStage} from "../../_interfaces/IStage";
 import {Subject, takeUntil} from "rxjs";
 
@@ -24,23 +23,13 @@ export class ProcessComponent implements OnInit {
   onDestroy = new Subject();
 
   deleteAlert: string | null = null;
-  constructor(private processService: ProcessService, private modalService: NgbModal) {
-    // this.processService.$stageList.subscribe(
-    //   stageList => {this.stageList = stageList
-    //   }
-    // )
-
-
+  constructor(private processService: ProcessService,) {
   }
 
   ngOnInit(): void {
     this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(
       stageList => this.stageList = stageList
     );
-
-    this.processService.getStageById(this.process.id)
-    console.log(this.process.id)
-
   }
 
   //confirm delete
@@ -77,4 +66,8 @@ export class ProcessComponent implements OnInit {
     this.onDestroy.complete();
   }
 
+  viewResponses() {
+    this.processService.$processToUpdate.next(this.process)
+    this.processService.$viewResponses.next(true)
+  }
 }

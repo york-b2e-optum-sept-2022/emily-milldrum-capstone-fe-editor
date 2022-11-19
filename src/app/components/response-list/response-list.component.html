@@ -1,1 +1,9 @@
-<p>response-list works!</p>
+<div class="centering"><h2>{{selectedProcess?.title}}</h2></div>
+<div class="centering">
+  <h4>Number of Responses: {{responseCount}}</h4>
+</div>
+
+<app-response
+  *ngFor="let response of responseList"
+  [response]="response"
+></app-response>

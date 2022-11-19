@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProcessService} from "../../services/process.service";
-import {first, isEmpty, Subject, takeUntil} from "rxjs";
+import {first, Subject, takeUntil} from "rxjs";
 import {ERROR} from "../../_enums/ERROR";
 import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -39,17 +39,10 @@ export class ProcessInputComponent implements OnInit {
 
     this.processService.$processError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message)
 
-    //get product to update
+    //get process to update
     this.processService.$processToUpdate.pipe(first()).subscribe(process => {
       if (process != null) {
         this.process = process;
-      }
-    })
-
-    //get product to update
-    this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(stageList => {
-      if (stageList != null) {
-        this.stageList = stageList;
       }
     })
   }

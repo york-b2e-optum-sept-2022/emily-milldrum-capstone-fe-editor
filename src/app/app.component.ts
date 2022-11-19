@@ -10,6 +10,7 @@ import {Subject, takeUntil} from "rxjs";
 export class AppComponent {
   title = 'emily-milldrum-capstone-fe-editor';
   isCreating: boolean = false;
+  viewResponses: boolean = false;
   onDestroy = new Subject();
 
 
@@ -17,6 +18,11 @@ export class AppComponent {
     this.processService.$isCreating.pipe(takeUntil(this.onDestroy))
       .subscribe(isCreating => {
         this.isCreating = isCreating
+      })
+
+    this.processService.$viewResponses.pipe(takeUntil(this.onDestroy))
+      .subscribe(viewResponses => {
+        this.viewResponses = viewResponses
       })
   }
 
