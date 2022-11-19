@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IProcess} from "../../_interfaces/IProcess";
 import {first, Subject, takeUntil} from "rxjs";
-import {IStage, IStageNew} from "../../_interfaces/IStage";
+import {IStage, IStageNew, IStageOptions} from "../../_interfaces/IStage";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ProcessService} from "../../services/process.service";
 import {ERROR} from "../../_enums/ERROR";
@@ -21,9 +21,11 @@ export class StageInputComponent implements OnInit {
   stageOrder: number = 0;
   isEditingStage: boolean = false;
   deleteAlert: string | null = null;
-  choiceInput: string = "";
+  choiceInput: IStageOptions = {
+    option: ""
+  };
 
-  stageOptions: string[] = [];
+  stageOptions: IStageOptions[] = [];
 
   stageEdit: IStage =
     {
@@ -72,7 +74,8 @@ export class StageInputComponent implements OnInit {
 
   //add a response choice
   addChoice() {
-    if (this.choiceInput == "" || null){
+    //TODO fix the choice input to choice: ??
+    if (this.choiceInput.option == "" || null){
       this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
     } else {
       this.stageOptions.push(this.choiceInput);
