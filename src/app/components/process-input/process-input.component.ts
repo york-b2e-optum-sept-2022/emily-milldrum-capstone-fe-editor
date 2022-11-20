@@ -48,6 +48,8 @@ export class ProcessInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.processService.$processError.next(null)
     if (this.process){
       this.title = this.process.title
       this.discontinued = this.process.discontinued;

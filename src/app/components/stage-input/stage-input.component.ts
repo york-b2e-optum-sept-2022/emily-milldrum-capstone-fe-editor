@@ -65,6 +65,7 @@ export class StageInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.processService.$stageError.next(null)
     if (this.stage !== null){
       this.question = this.stage.question;
       this.type = this.stage.type;

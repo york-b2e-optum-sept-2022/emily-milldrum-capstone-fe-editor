@@ -12,7 +12,7 @@ body {
   padding-top: 2rem;
   display: flex;
   justify-content: center;
-  font-family: Georgia;
+  font-family: Georgia, serif;
   font-size: large;
   color: darkslategrey;
   font-variant: small-caps;
@@ -30,14 +30,14 @@ body {
 }
 
 .font-green{
-  font-family: Georgia;
+  font-family: Georgia, serif;
   font-size: large;
   color: darkslategrey;
   font-variant: small-caps;
 }
 
 #title-style, #currentprocess-style{
-  font-family: Georgia;
+  font-family: Georgia, serif;
   font-size: xx-large;
   color: darkslategrey;
   font-variant: small-caps;
@@ -45,7 +45,7 @@ body {
 }
 
 #discontinued-style{
-  font-family: Georgia;
+  font-family: Georgia, serif;
   font-size: xx-large;
   color: darkgrey;
   font-variant: small-caps;
@@ -54,4 +54,13 @@ body {
 
 #error-message{
   color: chocolate;
+}
+
+#main-container, #main-sub-container{
+  border-radius: 1rem;
+
+  top: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 4rem;
 }
