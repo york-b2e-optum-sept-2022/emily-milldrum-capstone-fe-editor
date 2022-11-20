@@ -26,6 +26,9 @@ export class AppComponent {
       })
   }
 
+  ngOnInit(): void {
+  }
+
   createNewProcess() {
     this.processService.$isCreating.next(true)
   }

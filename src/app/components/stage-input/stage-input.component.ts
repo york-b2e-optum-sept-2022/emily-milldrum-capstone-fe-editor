@@ -14,8 +14,11 @@ import {ERROR} from "../../_enums/ERROR";
 export class StageInputComponent implements OnInit {
 
   errorMessage: string | null = null;
-  @Input()stage: IStage | null = null;
   onDestroy = new Subject();
+
+
+  @Input()stage: IStage | null = null;
+
   question: string = "";
   type: string = "";
   stageOrder: number = 0;
@@ -51,6 +54,9 @@ export class StageInputComponent implements OnInit {
     stage: [],
   };
 
+  option: string = "";
+  //curStageOptions: IStageOptions[] = [];
+
   constructor(private modalService: NgbModal, private processService: ProcessService) {
 
     this.processService.$stageError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
@@ -62,6 +68,8 @@ export class StageInputComponent implements OnInit {
         console.log(this.process)
       }
     })
+
+
   }
 
   ngOnInit(): void {
@@ -71,6 +79,9 @@ export class StageInputComponent implements OnInit {
       this.type = this.stage.type;
       this.stageOrder = this.stage.stageOrder;
     }
+
+    if(this.stage?.stageOptions){
+      this.stageOptions = this.stage?.stageOptions}
   }
 
   //add a response choice
@@ -92,7 +103,7 @@ export class StageInputComponent implements OnInit {
 
     if (this.question == ""){
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
-    } else if ((this.type == null) || (this.type == undefined)) {
+    } else if (this.type == null) {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
     } else if (this.process == null) {
       this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)

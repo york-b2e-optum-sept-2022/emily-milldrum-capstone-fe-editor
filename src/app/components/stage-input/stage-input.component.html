@@ -58,14 +58,25 @@
                 <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
               </div>
             </div>
-            <div *ngFor="let choice of stageOptions" class="col-8">
-              <div class="custom-control custom-radio custom-control-inline">
-                <input name="radio" id="radio_0" type="radio" class="custom-control-input" value="{{choice}}">
-                <label for="{{choice}}" class="custom-control-label">{{choice.toString()}}</label>
-              </div>
-            </div>
+            <div class="font-green">radio buttons are disabled on sample. one may be selected on live stage</div>
+
+            <app-stage-option-input
+              *ngFor="let option of stageOptions"
+              [option]="option"
+              [type]="type"
+            ></app-stage-option-input>
+
+<!--            -->
+<!--            <div *ngFor="let choice of stageOptions" class="col-8">-->
+<!--              <div class="custom-control custom-radio custom-control-inline">-->
+<!--                <input name="radio" id="radio_0" type="radio" class="custom-control-input" value="{{choice.option}}" [(ngModel)]="choice.option === option">-->
+<!--                <label for="{{choice}}" class="custom-control-label">&nbsp; {{choice.option}}</label>-->
+<!--              </div>-->
+<!--            </div>-->
 
           </ng-container>
+
+
 
           <!--          if selected multi single show this-->
           <ng-container *ngIf="type == 'Boolean'">
@@ -73,12 +84,12 @@
               <label class="col-4">Boolean Buttons</label>
               <div class="col-8">
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input name="radio" id="radio_false" type="radio" class="custom-control-input" value="false">
-                  <label for="radio_false" class="custom-control-label">False</label>
+                  <input name="radio" id="radio_true" type="radio" class="custom-control-input" value="true">
+                  <label for="radio_true" class="custom-control-label">&nbsp; True</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input name="radio" id="radio_true" type="radio" class="custom-control-input" value="true">
-                  <label for="radio_true" class="custom-control-label">True</label>
+                  <input name="radio" id="radio_false" type="radio" class="custom-control-input" value="false">
+                  <label for="radio_false" class="custom-control-label">&nbsp; False</label>
                 </div>
               </div>
             </div>
@@ -92,17 +103,18 @@
                 <input type="text" class="form-control" [(ngModel)]="choiceInput">
                 <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
               </div>
-              <div *ngFor="let choice of stageOptions" class="col-8">
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <!--                checked="checked" for pre-checked-->
-                  <input name="checkbox" id="checkbox_0" type="checkbox" class="custom-control-input"
-                         value="{{choice}}">
-                  <label for="checkbox_0" class="custom-control-label">{{choice.toString()}}</label>
-                </div>
+              <div class="font-green">checkboxes are disabled on sample. multiple or none may be selected on live stage</div>
 
-              </div>
+              <app-stage-option-input
+                *ngFor="let option of stageOptions"
+                [option]="option"
+                [type]="type"
+              ></app-stage-option-input>
+
             </div>
           </ng-container>
+
+
 
           <div class="centering" id="error-message">{{errorMessage}}</div>
           <ng-container *ngIf="!stage">
@@ -125,11 +137,18 @@
     <div class="container">
       <div class="card shadow">
         <div class="card-body">
-          id: {{stage.id}}<br>
-          question: {{stage.question}}<br>
-          type: {{stage.type}}<br>
-          order: {{stage.stageOrder}}<br>
+          <table  class="table table-light">
+            <tbody>
 
+              <th scope="row">id: {{stage.id}}</th>
+
+
+
+              <tr><ul><div class="font-green">prompt:</div> {{stage.question}}</ul></tr>
+              <tr><ul><div class="font-green">type:</div> {{stage.type}}</ul></tr>
+              <tr><ul><div class="font-green">order:</div> {{stage.stageOrder}}</ul></tr>
+            </tbody>
+          </table>
 
           <div class="modify-buttons">
 

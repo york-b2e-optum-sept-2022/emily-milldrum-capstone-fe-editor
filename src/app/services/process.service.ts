@@ -3,7 +3,7 @@ import {HttpService} from "./http.service";
 import {BehaviorSubject, first} from "rxjs";
 import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
-import {IStage, IStageNew} from "../_interfaces/IStage";
+import {IStage, IStageNew, IStageOptions} from "../_interfaces/IStage";
 import {IResponse} from "../_interfaces/IResponse";
 
 @Injectable({
@@ -11,6 +11,7 @@ import {IResponse} from "../_interfaces/IResponse";
 })
 export class ProcessService {
 
+  //process variables
   process: IProcess =   {
     id: 0,
     title: "",
@@ -22,6 +23,8 @@ export class ProcessService {
   $processError = new BehaviorSubject<string | null>(null)
   $processToUpdate = new BehaviorSubject<IProcess | null>(null);
 
+
+  //stage variables
   stage: IStage =   {
     id: 0,
     //processId: 0,
@@ -30,7 +33,6 @@ export class ProcessService {
     type: "",
     stageOptions: []
   };
-
   stageListCreate: IStageNew[] | null = null;
   stageList: IStage[] = [];
   $stageError = new BehaviorSubject<string | null>(null);
@@ -38,9 +40,11 @@ export class ProcessService {
   $stageList = new BehaviorSubject<IStage[]>([])
   $isCreating = new BehaviorSubject<boolean>(false)
 
+  //stage:option variables
+  $optionError = new BehaviorSubject<string | null>(null);
 
+  //response variables
   $viewResponses = new BehaviorSubject<boolean>(false)
-
   $responseList = new BehaviorSubject<IResponse[]>([])
 
   constructor( private httpService: HttpService) {
@@ -218,5 +222,19 @@ export class ProcessService {
         this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
       }
     })
+  }
+
+  updateOption(option: IStageOptions) {
+    this.httpService.updateOption(option).pipe(first()).subscribe({
+      next: (option) => {
+        console.log(option)
+        this.resetErrorMessages();
+      },
+      error: (err) => {
+        console.error(err);
+        this.$stageError.next(ERROR.OPTION_HTTP_ERROR)
+      }
+    })
+
   }
 }

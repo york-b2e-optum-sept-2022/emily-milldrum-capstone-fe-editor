@@ -18,10 +18,13 @@ export class NavbarComponent implements OnInit {
   home() {
     this.processService.$isCreating.next(false)
     this.processService.$viewResponses.next(false)
+    this.processService.$processToUpdate.next(null);
   }
 
   createNav() {
     this.processService.$isCreating.next(true)
     this.processService.$viewResponses.next(false)
+
+    this.processService.$processToUpdate.next(null);
   }
 }

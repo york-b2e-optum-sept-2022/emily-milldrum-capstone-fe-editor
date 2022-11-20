@@ -3,6 +3,6 @@ import {IAnswer} from "./IAnswer";
 
 export interface IResponse {
   id: number;
-  process: IProcess
+  processes: IProcess
   answer: IAnswer[];
 }

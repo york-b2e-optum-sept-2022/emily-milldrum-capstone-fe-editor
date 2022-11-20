@@ -14,6 +14,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import { StageOptionInputComponent } from './components/stage-option-input/stage-option-input.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {HttpClientModule} from "@angular/common/http";
     ResponseComponent,
     ResponseListComponent,
     NavbarComponent,
+    StageOptionInputComponent,
   ],
     imports: [
         BrowserModule,

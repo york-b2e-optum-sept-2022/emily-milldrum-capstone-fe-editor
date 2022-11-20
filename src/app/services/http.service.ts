@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {Observable} from "rxjs";
-import {IStage, IStageNew} from "../_interfaces/IStage";
+import {IStage, IStageNew, IStageOptions} from "../_interfaces/IStage";
 import {IResponse} from "../_interfaces/IResponse";
 
 @Injectable({
@@ -48,5 +48,9 @@ export class HttpService {
 
   getResponseListById(processId: number) {
     return this.httpClient.get('http://localhost:8080/api/response/' + processId) as Observable<IResponse[]>
+  }
+
+  updateOption(option: IStageOptions) {
+    return this.httpClient.put('http://localhost:8080/api/stageOptions/', option) as Observable<IStageOptions>;
   }
 }

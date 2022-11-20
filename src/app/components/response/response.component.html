@@ -4,10 +4,13 @@
     <tr>
 
       <th scope="row">id: {{response.id}}</th>
-      <div *ngFor="let answer of response.answer">
+    <tr><div *ngFor="let answer of response.answer">
 <!--        <td>stage question: {{answer.stage.question}}</td>-->
-        <td>answer: {{answer.answer}}</td>
+
+        <td><ul><div class="font-green">prompt:</div> {{answer.stage.question}}</ul></td>
+        <td><ul><div class="font-green">answer:</div> {{answer.answer}}</ul></td>
       </div>
+    </tr>
 <!--      <td>{{stage.question}}</td>-->
 <!--      <td> </td>-->
 <!--      <td>{{stage.type}}</td>-->
