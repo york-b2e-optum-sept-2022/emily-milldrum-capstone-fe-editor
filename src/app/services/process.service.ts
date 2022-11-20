@@ -42,6 +42,8 @@ export class ProcessService {
 
   //stage:option variables
   $optionError = new BehaviorSubject<string | null>(null);
+  //TODO
+  $stageOptList = new BehaviorSubject<IStage[]>([]);
 
   //response variables
   $viewResponses = new BehaviorSubject<boolean>(false)
@@ -184,7 +186,6 @@ export class ProcessService {
     console.log(this.stageListCreate)
    }
 
-
    //delete an existing stage
   deleteStage(id: number) {
     this.httpService.deleteStage(id).pipe(first()).subscribe({
@@ -224,6 +225,7 @@ export class ProcessService {
     })
   }
 
+  //update an existing stage: option in db
   updateOption(option: IStageOptions) {
     this.httpService.updateOption(option).pipe(first()).subscribe({
       next: (option) => {
@@ -236,5 +238,22 @@ export class ProcessService {
       }
     })
 
+  }
+
+  //delete an existing stage: option in db
+  deleteOption(id: number) {
+    this.httpService.deleteOption(id).pipe(first()).subscribe({
+      next: () => {
+        // let newStageList: IStage[] = [...this.$stageToUpdate.getValue()];
+        // this.$stageList.next(
+        //   newStageList.filter(stage.stageOptions => stage.options.id !== id)
+        // );
+        console.log('success')
+      },
+      error: (err) => {
+        console.log(err)
+        this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
+      }
+    })
   }
 }

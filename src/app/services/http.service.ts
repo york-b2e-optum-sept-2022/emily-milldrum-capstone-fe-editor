@@ -53,4 +53,8 @@ export class HttpService {
   updateOption(option: IStageOptions) {
     return this.httpClient.put('http://localhost:8080/api/stageOptions/', option) as Observable<IStageOptions>;
   }
+
+  deleteOption(id: number) {
+    return this.httpClient.delete('http://localhost:8080/api/stageOptions/' + id) as Observable<IStageOptions[]>;
+  }
 }

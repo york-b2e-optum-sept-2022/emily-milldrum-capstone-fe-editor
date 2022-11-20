@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IStageOptions} from "../../_interfaces/IStage";
+import {IStage, IStageOptions} from "../../_interfaces/IStage";
 import {ProcessService} from "../../services/process.service";
 import {ERROR} from "../../_enums/ERROR";
 import {Subject, takeUntil} from "rxjs";
@@ -10,7 +10,7 @@ import {Subject, takeUntil} from "rxjs";
   styleUrls: ['./stage-option-input.component.css']
 })
 export class StageOptionInputComponent implements OnInit {
-  
+
   @Input() option: IStageOptions = {id: 0, option: ""};
   @Input() type: string = "";
   isEditingOption: boolean = false;
@@ -18,19 +18,23 @@ export class StageOptionInputComponent implements OnInit {
 
   errorMessage: string | null = null;
   onDestroy = new Subject();
+  private stageToUpdate: IStage | null = null;
 
   constructor(private processService: ProcessService) {
     this.processService = processService;
 
     this.processService.$optionError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
+    this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
+
   }
 
   ngOnInit(): void {
   }
 
   onDelete() {
-    console.log('delete')
-    console.log(this.option)
+    if(this.option.id){
+      this.processService.deleteOption(this.option.id)
+    }
   }
 
   //open editing panel
@@ -48,7 +52,6 @@ export class StageOptionInputComponent implements OnInit {
       this.processService.updateOption(this.option);
       this.isEditingOption = false;
     }
-
   }
 
   //cancel update
