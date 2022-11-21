@@ -48,9 +48,7 @@ export class ProcessInputComponent implements OnInit {
 
     //get creating stagelist
     this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(sl => {
-      if (sl != null) {
         this.stageList = sl;
-      }
     })
   }
 

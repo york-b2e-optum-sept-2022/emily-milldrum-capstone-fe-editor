@@ -24,12 +24,13 @@ export class ProcessComponent implements OnInit {
 
   deleteAlert: string | null = null;
   constructor(private processService: ProcessService,) {
-  }
-
-  ngOnInit(): void {
     this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(
       stageList => this.stageList = stageList
     );
+  }
+
+  ngOnInit(): void {
+
   }
 
   //confirm delete
