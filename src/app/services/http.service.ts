@@ -12,6 +12,8 @@ export class HttpService {
 
   constructor(private httpClient: HttpClient) { }
 
+
+  //process requests
   getProcessList() {
     return this.httpClient.get('http://localhost:8080/api/process') as Observable<IProcess[]>
   }
@@ -26,6 +28,12 @@ export class HttpService {
     return this.httpClient.delete('http://localhost:8080/api/process/' + processId) as Observable<IProcess[]>;
   }
 
+  addStage(stageNew: IStageNew) { //for adding a stage to an existing process
+    return this.httpClient.post('http://localhost:8080/api/stage/addToProcess/', stageNew) as Observable<IStage>;
+  }
+
+
+  //stage requests
   createStage(stage: IStageNew) {
     return this.httpClient.post('http://localhost:8080/api/stage', stage) as Observable<IStage>;
   }
@@ -34,9 +42,9 @@ export class HttpService {
     return this.httpClient.get('http://localhost:8080/api/stage') as Observable<IStage[]>
   }
 
-  getStagesById(processId: number) {
-    return this.httpClient.get('http://localhost:8080/api/stage/byId/' + processId) as Observable<IStage[]>
-  }
+  // getStagesById(processId: number) {
+  //   return this.httpClient.get('http://localhost:8080/api/stage/byId/' + processId) as Observable<IStage[]>
+  // }
 
   deleteStage(stageId: number) {
     return this.httpClient.delete('http://localhost:8080/api/stage/' + stageId) as Observable<IStage[]>;
@@ -46,15 +54,18 @@ export class HttpService {
     return this.httpClient.put('http://localhost:8080/api/stage/', stage) as Observable<IStage>;
   }
 
-  getResponseListById(processId: number) {
-    return this.httpClient.get('http://localhost:8080/api/response/' + processId) as Observable<IResponse[]>
-  }
 
+  //stage: stage options
   updateOption(option: IStageOptions) {
     return this.httpClient.put('http://localhost:8080/api/stageOptions/', option) as Observable<IStageOptions>;
   }
 
   deleteOption(id: number) {
     return this.httpClient.delete('http://localhost:8080/api/stageOptions/' + id) as Observable<IStageOptions[]>;
+  }
+
+  //response requests
+  getResponseListById(processId: number) {
+    return this.httpClient.get('http://localhost:8080/api/response/' + processId) as Observable<IResponse[]>
   }
 }

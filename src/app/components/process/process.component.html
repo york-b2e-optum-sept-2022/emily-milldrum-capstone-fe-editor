@@ -77,15 +77,29 @@
           </ng-container>
 
         </div>
+
       </ng-template>
       <ng-template ngbPanelContent>
-        process id: {{process.id}}<br>
-        discontinued: {{process.discontinued}}<br>
-        stages: <app-stage *ngFor="let stage of process.stage"
-      [stage] ="stage">
 
-      </app-stage>
-        {{process.stage}}<br>
+        <div class="centering"><h3>Prompts</h3></div>
+        <table class="table table-light">
+          <tbody>
+          <tr>
+            <th scope="row" colspan="1">HEADER</th>
+            <td></td>
+            </tr>
+
+        <ng-container *ngIf="process.stage !== undefined">
+          <app-stage *ngFor="let stages of process.stage"
+                     [stage]="stages">
+          </app-stage>
+        </ng-container>
+          </tbody>
+        </table>
+
+        <div class="centering">
+          <button class="btn btn-light" (click)="viewResponses()">View Responses</button>
+        </div>
 
       </ng-template>
     </ngb-panel>

@@ -24,16 +24,19 @@ export class StageInputComponent implements OnInit {
   stageOrder: number = 0;
   isEditingStage: boolean = false;
   deleteAlert: string | null = null;
-  choiceInput: IStageOptions = {
-    option: ""
-  };
+  choiceInput: string = "";
+  // choiceInput: IStageOptions = {
+  //   option: ""
+  // };
+  creatingOptions: IStageOptions = {option: ""};
+ // option: string = "";
+  //curStageOptions: IStageOptions[] = [];
 
   stageOptions: IStageOptions[] = [];
 
   stageEdit: IStage =
     {
       id: 0,
-      //processId: 0,
       question: "",
       stageOrder: 0,
       type: "",
@@ -41,12 +44,12 @@ export class StageInputComponent implements OnInit {
     }
 
   stageNew: IStageNew = {
-    //processId: 0,
     question: "",
     stageOrder: 0,
     type: "",
-    stageOptions: [],
+    stageOptions: []
   }
+
   process: IProcess = {
     id: 0,
     title: "",
@@ -54,22 +57,19 @@ export class StageInputComponent implements OnInit {
     stage: [],
   };
 
-  option: string = "";
-  //curStageOptions: IStageOptions[] = [];
+
 
   constructor(private modalService: NgbModal, private processService: ProcessService) {
 
     this.processService.$stageError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
+    this.processService.$isEditingStage.pipe(takeUntil(this.onDestroy)).subscribe(status => this.isEditingStage = status);
 
     this.processService.$processToUpdate.pipe(first()).subscribe(process => {
       if (process != null) {
         this.process = process;
-        console.log("selected process")
-        console.log(this.process)
       }
     })
-
-
+    this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
   }
 
   ngOnInit(): void {
@@ -87,14 +87,15 @@ export class StageInputComponent implements OnInit {
   //add a response choice
   addChoice() {
     //TODO fix the choice input to choice: ??
-    if (this.choiceInput.option == "" || null){
+    if (this.choiceInput == ("" || null)){
       this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
     } else {
-      this.stageOptions.push(this.choiceInput);
+      //this.creatingOptions.option = (...this.choiceInput);
+      this.stageOptions.push(this.creatingOptions);
       this.processService.$stageError.next(null)
       console.log(this.choiceInput)
       console.log(this.stageOptions)
-      console.log(this.stageOptions.length)
+      this.choiceInput = "";
     }
 
   }
@@ -103,7 +104,7 @@ export class StageInputComponent implements OnInit {
 
     if (this.question == ""){
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
-    } else if (this.type == null) {
+    } else if (this.type == "") {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
     } else if (this.process == null) {
       this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
@@ -117,10 +118,20 @@ export class StageInputComponent implements OnInit {
       this.stageNew.stageOrder = this.stageOrder;
       this.stageNew.type = this.type;
       this.stageNew.stageOptions = this.stageOptions;
+      //if there is no process TODO
+      this.stageNew.processId = this.process.id;
       this.processService.createStage(this.stageNew);
-      this.processService.$processToUpdate.next(null);
-      this.processService.$stageError.next(null)
-      this.closeThis();
+
+        //reset
+        this.processService.$processToUpdate.next(null);
+        this.processService.$stageError.next(null)
+        this.question = "";
+        this.type = "";
+        this.choiceInput = "";
+        this.stageOrder = 0;
+        this.stageOptions = []
+        this.closeThis();
+
     }
   }
 
@@ -128,7 +139,6 @@ export class StageInputComponent implements OnInit {
   onEdit() {
     this.isEditingStage = true;
   }
-
 
   onUpdate() {
       if (this.stage == null) {
@@ -141,12 +151,9 @@ export class StageInputComponent implements OnInit {
         this.stage.stageOrder = this.stageOrder
         this.stage.stageOptions = this.stageOptions
         this.processService.updateStage(this.stage)
-        console.log(this.stage)
 
-        this.isEditingStage = false;
     }
   }
-
 
   //unsubscribing
   ngOnDestroy(): void {
@@ -154,7 +161,7 @@ export class StageInputComponent implements OnInit {
     this.onDestroy.complete();
   }
 
-  //for closing the editting option
+  //for closing the editing option
   closeThis() {
     this.isEditingStage = false;
     this.processService.$processToUpdate.next(null);

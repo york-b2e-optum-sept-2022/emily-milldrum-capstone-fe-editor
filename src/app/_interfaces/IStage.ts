@@ -10,6 +10,7 @@ export interface IStageNew {
   stageOrder: number;
   type: string;
   stageOptions: IStageOptions[];
+  processId?: number;
 }
 
 export interface IStageOptions {

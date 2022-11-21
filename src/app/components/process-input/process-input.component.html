@@ -1,53 +1,54 @@
+<div class="container">
+  <div class="close-button">
+    <button class="btn btn-dark" (click)="closeThis()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+           viewBox="0 0 16 16">
+        <path
+          d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+      </svg>
+    </button>
+  </div>
+  <div *ngIf="!process" class="centering">
+    <h3 class="text-center pt-3">Create New Process</h3>
+  </div>
+  <div *ngIf="process" class="centering">
+    <h3 class="text-center pt-3">Update Process</h3>
+  </div>
 
-    <div class="container">
-            <div class="close-button">
-            <button class="btn btn-dark" (click)="closeThis()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
-                   viewBox="0 0 16 16">
-                <path
-                  d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-              </svg>
-            </button>
-            </div>
-            <div *ngIf="!process" class="centering">
-              <h3 class="text-center pt-3">Create New Process</h3>
-            </div>
-            <div *ngIf="process" class="centering">
-              <h3 class="text-center pt-3">Update Process</h3>
-            </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text">Title</span>
+    <input type="text" class="form-control" [(ngModel)]="title">
+  </div>
+  <div>
+    <input class="form-check-input" type="checkbox" id="finishedCheckbox" [(ngModel)]="discontinued">
+    <label class="form-check-label" id="title-style" for="finishedCheckbox">
+      <h5>&nbsp; | Discontinue?</h5>
+    </label>
+  </div>
 
-            <div class="input-group mb-3">
-              <span class="input-group-text">Title</span>
-              <input type="text" class="form-control" [(ngModel)]="title">
-            </div>
-            <div>
-              <input class="form-check-input" type="checkbox" id="finishedCheckbox" [(ngModel)]="discontinued">
-              <label class="form-check-label" id="title-style" for="finishedCheckbox">
-                <h5>&nbsp; | Discontinue?</h5>
-              </label>
-            </div>
+<!-- render existing stages-->
+  <app-stage-input></app-stage-input>
+  <ng-container *ngIf="process !== null">
+    <app-stage-input *ngFor="let stages of process.stage"
+                     [stage]="stages">
+    </app-stage-input>
+  </ng-container>
 
-            <app-stage-input></app-stage-input>
-            <ng-container *ngIf="process !== null">
-            <app-stage-input *ngFor="let stages of process.stage"
-                       [stage]="stages">
-            </app-stage-input>
-            </ng-container>
+<!--  render stages being created-->
+  <ng-container *ngIf="stageList !== null">
+    <app-stage-input *ngFor="let stages of stageList"
+                     [stage]="stages">
+    </app-stage-input>
+  </ng-container>
 
-            <ng-container *ngIf="stageList !== null">
-              <app-stage-input *ngFor="let stages of stageList"
-                               [stage]="stages">
-              </app-stage-input>
-            </ng-container>
+  <div class="centering" id="error-message">{{errorMessage}}</div>
 
-            <div class="centering" id="error-message">{{errorMessage}}</div>
-
-            <ng-container *ngIf="!process">
-              <button class="btn btn-light" (click)="onCreate()">Create</button>
-            </ng-container>
-            <ng-container *ngIf="process">
-              <button class="btn btn-light" (click)="onUpdate()">Update</button>
-            </ng-container>
-          </div>
+  <ng-container *ngIf="!process">
+    <button class="btn btn-light" (click)="onCreate()">Create</button>
+  </ng-container>
+  <ng-container *ngIf="process">
+    <button class="btn btn-light" (click)="onUpdate()">Update</button>
+  </ng-container>
+</div>
 
 

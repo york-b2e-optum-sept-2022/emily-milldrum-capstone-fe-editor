@@ -3,7 +3,7 @@
     <div class="container">
       <div class="card shadow">
         <div class="card-body">
-          <div class="close-button">
+          <div class="close-button" *ngIf="stage">
             <button class="btn btn-dark" (click)="closeThis()">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
                    viewBox="0 0 16 16">
@@ -60,6 +60,7 @@
             </div>
             <div class="font-green">radio buttons are disabled on sample. one may be selected on live stage</div>
 
+            <app-stage-option-input></app-stage-option-input>
             <app-stage-option-input
               *ngFor="let option of stageOptions"
               [option]="option"

@@ -39,11 +39,11 @@ export class ProcessService {
   $stageToUpdate = new BehaviorSubject<IStage | null>(null);
   $stageList = new BehaviorSubject<IStage[]>([])
   $isCreating = new BehaviorSubject<boolean>(false)
+  $isEditingStage = new BehaviorSubject<boolean>(false);
 
   //stage:option variables
   $optionError = new BehaviorSubject<string | null>(null);
-  //TODO
-  $stageOptList = new BehaviorSubject<IStage[]>([]);
+  $stageOptList = new BehaviorSubject<IStageOptions[]>([]);
 
   //response variables
   $viewResponses = new BehaviorSubject<boolean>(false)
@@ -51,7 +51,6 @@ export class ProcessService {
 
   constructor( private httpService: HttpService) {
     this.getAllProcess();
-    //this.getAllStages();
   }
 
 
@@ -81,6 +80,7 @@ export class ProcessService {
     });
   }
 
+  //get response list
   getResponseList(selectedProcess: IProcess){
     this.httpService.getResponseListById(selectedProcess.id).pipe(first()).subscribe({
       next: (responseList) => {
@@ -174,13 +174,31 @@ export class ProcessService {
 
   //create a new stage
   createStage(stageNew: IStageNew) {
+
+    //this part works for adding a new stage to existing
+    this.httpService.addStage(stageNew).pipe(first()).subscribe({
+      next: (stage) =>{
+        // let newProcessList: stage[] = [...this.$processList.getValue()];
+        // newProcessList.push(process);
+        // this.$processList.next(newProcessList)
+        return true;
+      },
+      error: (err) => {
+        console.log(err)
+        //this.$processError.next(ERROR.PROCESS_ADD_ERROR)
+        return false;
+      }
+    })
+    // console.log('stage added?')
+
+    // //TODO check for existing list
     console.log('create ps: stagenew')
     console.log(stageNew)
     if(this.stageListCreate == null){
       this.stageListCreate = [];
     }
-
-    this.stageListCreate.push(stageNew);
+    let stageCopy = JSON.parse(JSON.stringify(stageNew))
+    this.stageListCreate.push(stageCopy);
     this.$stageList.next(this.stageListCreate);
     console.log('create ps: stageListCrreate')
     console.log(this.stageListCreate)
@@ -215,6 +233,7 @@ export class ProcessService {
             return newStage;
           })
         );
+        this.$isEditingStage.next(false);
         this.$stageToUpdate.next(null);
         this.resetErrorMessages();
       },

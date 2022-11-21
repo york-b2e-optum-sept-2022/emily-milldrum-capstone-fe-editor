@@ -45,6 +45,13 @@ export class ProcessInputComponent implements OnInit {
         this.process = process;
       }
     })
+
+    //get creating stagelist
+    this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(sl => {
+      if (sl != null) {
+        this.stageList = sl;
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -72,6 +79,7 @@ export class ProcessInputComponent implements OnInit {
 
 
   onUpdate() {
+    console.log(this.process)
     if(this.process == null){
       this.processService.$processError.next(ERROR.PROCESS_NULL)
     } else if (this.title == ""){

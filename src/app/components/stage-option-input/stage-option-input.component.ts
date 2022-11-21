@@ -18,13 +18,16 @@ export class StageOptionInputComponent implements OnInit {
 
   errorMessage: string | null = null;
   onDestroy = new Subject();
-  private stageToUpdate: IStage | null = null;
+  //private stageToUpdate: IStage | null = null;
+  //private stageOptions: IStageOptions[] | null = null;
+  //  choiceInput: any;
 
   constructor(private processService: ProcessService) {
     this.processService = processService;
 
     this.processService.$optionError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
-    this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
+    //this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
+    // this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
 
   }
 
@@ -66,4 +69,20 @@ export class StageOptionInputComponent implements OnInit {
     this.onDestroy.next(null);
     this.onDestroy.complete();
   }
+
+  // //add a response choice
+  // addChoice() {
+  //   //TODO fix the choice input to choice: ??
+  //   if (this.choiceInput == ("" || null)){
+  //     this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
+  //   } else {
+  //     //this.creatingOptions.option = (...this.choiceInput);
+  //     //this.stageOptions.push(this.creatingOptions);
+  //     this.processService.$stageError.next(null)
+  //     console.log(this.choiceInput)
+  //     //console.log(this.stageOptions)
+  //     this.choiceInput = "";
+  //   }
+
+  //}
 }
