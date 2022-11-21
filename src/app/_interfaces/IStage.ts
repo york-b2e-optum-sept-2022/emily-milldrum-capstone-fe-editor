@@ -16,4 +16,5 @@ export interface IStageNew {
 export interface IStageOptions {
   id?: number,
   option: string
+  stageId?: number,
 }

@@ -26,8 +26,17 @@
     </label>
   </div>
 
+  <div class="centering">
+    ___________________________________
+  </div>
+
 <!-- render existing stages-->
   <app-stage-input></app-stage-input>
+
+  <div class="centering">
+    __________Existing Stages Management__________
+  </div>
+
   <ng-container *ngIf="process !== null">
     <app-stage-input *ngFor="let stages of process.stage"
                      [stage]="stages">

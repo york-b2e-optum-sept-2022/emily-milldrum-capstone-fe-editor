@@ -13,7 +13,6 @@ import {ProcessService} from "../../services/process.service";
 })
 export class StageListComponent implements OnInit {
   stageList: IStage[] =[]
-  //TODO
   @Input() process!: IProcess;
   onDestroy = new Subject();
 

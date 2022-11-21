@@ -68,4 +68,8 @@ export class HttpService {
   getResponseListById(processId: number) {
     return this.httpClient.get('http://localhost:8080/api/response/' + processId) as Observable<IResponse[]>
   }
+
+  addOption(choice: IStageOptions) {  // for adding an option to an existing option
+    return this.httpClient.post('http://localhost:8080/api/stageOptions/addToStage/', choice) as Observable<IStage>;
+  }
 }

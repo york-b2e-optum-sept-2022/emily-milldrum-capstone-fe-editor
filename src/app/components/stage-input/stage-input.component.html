@@ -37,8 +37,9 @@
               <option>Multiple Choice: Multiple</option>
             </select>
           </div>
+
           <div class="centering">
-            _________________________________
+            _____________Stage Options______________
           </div>
 
           <!--          if selected textbox show this-->
@@ -137,6 +138,7 @@
   </div>
 </ng-container>
 
+
 <!--when not editing and no stage is selected-->
 <ng-container *ngIf="!isEditingStage && stage !== null">
   <div class="card-body">
@@ -149,10 +151,10 @@
               <th scope="row">id: {{stage.id}}</th>
 
 
-
+              <tr><ul><div class="font-green">order:</div> {{stage.stageOrder}}</ul></tr>
               <tr><ul><div class="font-green">prompt:</div> {{stage.question}}</ul></tr>
               <tr><ul><div class="font-green">type:</div> {{stage.type}}</ul></tr>
-              <tr><ul><div class="font-green">order:</div> {{stage.stageOrder}}</ul></tr>
+              <tr *ngIf="(type == 'Multiple Choice: Multiple')||(type == 'Multiple Choice: Single')"><ul><div class="font-green"># options:</div> {{stageOptCount}}</ul></tr>
             </tbody>
           </table>
 

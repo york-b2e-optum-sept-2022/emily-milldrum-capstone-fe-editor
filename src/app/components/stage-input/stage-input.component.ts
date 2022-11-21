@@ -25,6 +25,7 @@ export class StageInputComponent implements OnInit {
   isEditingStage: boolean = false;
   deleteAlert: string | null = null;
   choiceInput: string = "";
+  stageOptCount: number = 0;
 
   creatingOptions: IStageOptions = {option: ""};
  // option: string = "";
@@ -48,12 +49,14 @@ export class StageInputComponent implements OnInit {
     stageOptions: []
   }
 
-  process: IProcess = {
-    id: 0,
-    title: "",
-    discontinued: false,
-    stage: [],
-  };
+  process: IProcess | null = null;
+
+  //   = {
+  //   id: 0,
+  //   title: "",
+  //   discontinued: false,
+  //   stage: [],
+  // };
 
   stageOption: IStageOptions = {
     option: ""
@@ -82,31 +85,10 @@ export class StageInputComponent implements OnInit {
       this.stageOrder = this.stage.stageOrder;
     }
     if(this.stage?.stageOptions){
-      this.stageOptions = this.stage?.stageOptions}
+      this.stageOptions = this.stage?.stageOptions
+    this.stageOptCount = this.stageOptions.length}
   }
 
-  // //add a stage choice
-  // addChoice() {
-  //   if (this.choiceInput == ("" || null)) {
-  //     this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
-  //   } else {
-  //     if (this.stage?.stageOptions) { // if this is an existing stage
-  //       console.log('this stage has options already')
-  //       console.log(this.stage.stageOptions)
-  //     } else { //if this is a new stage
-  //       console.log('this stage does not have options already')
-  //       //this.creatingOptions.option = (...this.choiceInput);
-  //       this.stageOption.option = this.choiceInput;
-  //       //let stageOptCopy = [...this.stageOption]
-  //       this.stageOptions.push(this.stageOption);
-  //       this.processService.$stageError.next(null)
-  //       console.log(this.choiceInput)
-  //       console.log(this.stageOptions)
-  //       //this.processService.$stageOptList
-  //       this.choiceInput = "";
-  //     }
-  //   }
-  // }
   //create a new stage check for question, null process, ensure at least 2 options entered
   onCreate() {
 
@@ -114,8 +96,8 @@ export class StageInputComponent implements OnInit {
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
     } else if (this.type == "") {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
-    } else if (this.process == null) {
-      this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
+    // } else if (this.process == null) {
+    //   this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
     } else if (this.type == 'Multiple Choice: Single' && this.stageOptions.length < 2){
       this.processService.$stageError.next(ERROR.STAGE_OPTION_ADD_MORE)
     } else if (this.type == 'Multiple Choice: Multiple' && this.stageOptions.length < 2) {
@@ -127,7 +109,9 @@ export class StageInputComponent implements OnInit {
       this.stageNew.type = this.type;
       this.stageNew.stageOptions = this.stageOptions;
       //if there is no process TODO
-      this.stageNew.processId = this.process.id;
+      if(this.process !== null){
+        this.stageNew.processId = this.process.id;
+      }
       this.processService.createStage(this.stageNew);
 
         //reset
@@ -149,6 +133,8 @@ export class StageInputComponent implements OnInit {
     this.isEditingStage = true;
   }
 
+
+  //
   onUpdate() {
       if (this.stage == null) {
         this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
@@ -193,7 +179,9 @@ export class StageInputComponent implements OnInit {
 
   }
 
+  //generate a new field to fill
   addField() {
     this.stageOptions.push({option: ""});
   }
+
 }
