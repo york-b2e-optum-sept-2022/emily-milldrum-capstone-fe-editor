@@ -52,7 +52,7 @@ body {
   vertical-align: center;
 }
 
-#error-message{
+#error-message, .error-message{
   color: chocolate;
 }
 
