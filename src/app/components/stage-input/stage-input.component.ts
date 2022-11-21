@@ -25,9 +25,7 @@ export class StageInputComponent implements OnInit {
   isEditingStage: boolean = false;
   deleteAlert: string | null = null;
   choiceInput: string = "";
-  // choiceInput: IStageOptions = {
-  //   option: ""
-  // };
+
   creatingOptions: IStageOptions = {option: ""};
  // option: string = "";
   //curStageOptions: IStageOptions[] = [];
@@ -57,6 +55,10 @@ export class StageInputComponent implements OnInit {
     stage: [],
   };
 
+  stageOption: IStageOptions = {
+    option: ""
+  };
+
 
 
   constructor(private modalService: NgbModal, private processService: ProcessService) {
@@ -79,26 +81,32 @@ export class StageInputComponent implements OnInit {
       this.type = this.stage.type;
       this.stageOrder = this.stage.stageOrder;
     }
-
     if(this.stage?.stageOptions){
       this.stageOptions = this.stage?.stageOptions}
   }
 
-  //add a response choice
-  addChoice() {
-    //TODO fix the choice input to choice: ??
-    if (this.choiceInput == ("" || null)){
-      this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
-    } else {
-      //this.creatingOptions.option = (...this.choiceInput);
-      this.stageOptions.push(this.creatingOptions);
-      this.processService.$stageError.next(null)
-      console.log(this.choiceInput)
-      console.log(this.stageOptions)
-      this.choiceInput = "";
-    }
-
-  }
+  // //add a stage choice
+  // addChoice() {
+  //   if (this.choiceInput == ("" || null)) {
+  //     this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
+  //   } else {
+  //     if (this.stage?.stageOptions) { // if this is an existing stage
+  //       console.log('this stage has options already')
+  //       console.log(this.stage.stageOptions)
+  //     } else { //if this is a new stage
+  //       console.log('this stage does not have options already')
+  //       //this.creatingOptions.option = (...this.choiceInput);
+  //       this.stageOption.option = this.choiceInput;
+  //       //let stageOptCopy = [...this.stageOption]
+  //       this.stageOptions.push(this.stageOption);
+  //       this.processService.$stageError.next(null)
+  //       console.log(this.choiceInput)
+  //       console.log(this.stageOptions)
+  //       //this.processService.$stageOptList
+  //       this.choiceInput = "";
+  //     }
+  //   }
+  // }
   //create a new stage check for question, null process, ensure at least 2 options entered
   onCreate() {
 
@@ -137,6 +145,7 @@ export class StageInputComponent implements OnInit {
 
   //edit button clicked
   onEdit() {
+    this.processService.$stageToUpdate.next(this.stage);
     this.isEditingStage = true;
   }
 
@@ -151,7 +160,6 @@ export class StageInputComponent implements OnInit {
         this.stage.stageOrder = this.stageOrder
         this.stage.stageOptions = this.stageOptions
         this.processService.updateStage(this.stage)
-
     }
   }
 
@@ -185,4 +193,7 @@ export class StageInputComponent implements OnInit {
 
   }
 
+  addField() {
+    this.stageOptions.push({option: ""});
+  }
 }

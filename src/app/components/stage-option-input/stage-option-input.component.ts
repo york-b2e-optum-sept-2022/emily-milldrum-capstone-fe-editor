@@ -15,10 +15,11 @@ export class StageOptionInputComponent implements OnInit {
   @Input() type: string = "";
   isEditingOption: boolean = false;
   choiceEdit: string = "";
+  choiceFormat: IStageOptions = {option: ""}
 
   errorMessage: string | null = null;
   onDestroy = new Subject();
-  //private stageToUpdate: IStage | null = null;
+  stageToUpdate: IStage | null = null;
   //private stageOptions: IStageOptions[] | null = null;
   //  choiceInput: any;
 
@@ -26,7 +27,7 @@ export class StageOptionInputComponent implements OnInit {
     this.processService = processService;
 
     this.processService.$optionError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
-    //this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
+    this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
     // this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
 
   }
@@ -37,6 +38,9 @@ export class StageOptionInputComponent implements OnInit {
   onDelete() {
     if(this.option.id){
       this.processService.deleteOption(this.option.id)
+    } else {
+      this.choiceFormat.option = this.choiceEdit
+      this.processService.deleteOptionNS(this.choiceFormat)
     }
   }
 
@@ -51,9 +55,22 @@ export class StageOptionInputComponent implements OnInit {
     if(this.choiceEdit == ""){
       this.processService.$optionError.next(ERROR.OPTION_VALUE_EMPTY)
     } else {
-      this.option.option = this.choiceEdit
-      this.processService.updateOption(this.option);
-      this.isEditingOption = false;
+        if(this.option.id){ //if this stage option exists in db
+          this.option.option = this.choiceEdit
+          this.processService.updateOption(this.option);
+          this.isEditingOption = false;
+        } else { //if stage does not exist in db
+          console.log("this stage opt does not exist in db yet")
+          if(this.stageToUpdate !== null) {//if stage to update add to db
+            console.log('stage exists, add new to existing stage')
+          } else {//if stage new, store in ps on new array until stage saved.
+            console.log('new stage store in ps until stage save')
+            this.choiceFormat.option = this.choiceEdit
+            this.processService.addOptionNS(this.choiceFormat)
+          }
+
+
+        }
     }
   }
 
@@ -83,6 +100,6 @@ export class StageOptionInputComponent implements OnInit {
   //     //console.log(this.stageOptions)
   //     this.choiceInput = "";
   //   }
-
-  //}
+  //
+  // }
 }

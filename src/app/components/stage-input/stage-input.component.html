@@ -37,6 +37,9 @@
               <option>Multiple Choice: Multiple</option>
             </select>
           </div>
+          <div class="centering">
+            _________________________________
+          </div>
 
           <!--          if selected textbox show this-->
           <ng-container *ngIf="type == 'Textbox'">
@@ -54,11 +57,12 @@
             <div class="form-group row">
               <div class="input-group mb-3">
                 <span class="input-group-text">Create Field</span>
-                <input type="text" class="form-control" [(ngModel)]="choiceInput">
-                <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
+<!--                <input type="text" class="form-control" [(ngModel)]="choiceInput">-->
+                <button class="btn btn-light" (click)="addField()">Add New</button>
               </div>
             </div>
             <div class="font-green">radio buttons are disabled on sample. one may be selected on live stage</div>
+
 
             <app-stage-option-input></app-stage-option-input>
             <app-stage-option-input
@@ -100,9 +104,10 @@
           <ng-container *ngIf="type == 'Multiple Choice: Multiple'">
             <div class="form-group row">
               <div class="input-group mb-3">
+
+                <!--                <input type="text" class="form-control" [(ngModel)]="choiceInput">-->
                 <span class="input-group-text">Create Field</span>
-                <input type="text" class="form-control" [(ngModel)]="choiceInput">
-                <button class="btn btn-light" (click)="addChoice()">Add Choice</button>
+                <button class="btn btn-light" (click)="addField()">Add New</button>
               </div>
               <div class="font-green">checkboxes are disabled on sample. multiple or none may be selected on live stage</div>
 

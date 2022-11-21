@@ -44,6 +44,7 @@ export class ProcessService {
   //stage:option variables
   $optionError = new BehaviorSubject<string | null>(null);
   $stageOptList = new BehaviorSubject<IStageOptions[]>([]);
+  newStageOptList: IStageOptions[] = [];
 
   //response variables
   $viewResponses = new BehaviorSubject<boolean>(false)
@@ -180,7 +181,8 @@ export class ProcessService {
       next: (stage) =>{
         // let newProcessList: stage[] = [...this.$processList.getValue()];
         // newProcessList.push(process);
-        // this.$processList.next(newProcessList)
+        // this.$processList.next(newProcessList)]
+        console.log(stage)
         return true;
       },
       error: (err) => {
@@ -274,5 +276,20 @@ export class ProcessService {
         this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
       }
     })
+  }
+
+  //add new option to new stage
+  addOptionNS(choice: IStageOptions) {
+    this.newStageOptList.push(choice)
+    this.$stageOptList.next(this.newStageOptList)
+    console.log(this.newStageOptList)
+  }
+
+  deleteOptionNS(choice: IStageOptions) {
+    const index =this.newStageOptList.indexOf(choice)
+    if (index > -1){
+      this.newStageOptList.splice(index, 1)
+    }
+    console.log(this.newStageOptList)
   }
 }
