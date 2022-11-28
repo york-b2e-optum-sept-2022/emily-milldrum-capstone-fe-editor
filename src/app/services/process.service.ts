@@ -123,10 +123,8 @@ export class ProcessService {
         this.$processError.next(ERROR.PROCESS_ADD_ERROR)
       }
     })
-     this.stageListCreate = [];
-     this.$processError.next(null)
      this.$isCreating.next(false)
-     this.$processToUpdate.next(null);
+     this.resetAll()
      return true;
    }
   }
@@ -161,7 +159,7 @@ export class ProcessService {
             })
           );
           this.$processToUpdate.next(null);
-          this.resetErrorMessages();
+          this.resetAll()
         },
           error: (err) => {
           console.error(err);
@@ -174,9 +172,14 @@ export class ProcessService {
   private resetErrorMessages() {
     this.$processError.next(null)
     this.$stageError.next(null)
-
+    this.$optionError.next(null)
   }
 
+  private resetAll(){
+    this.$stageList.next([])
+    this.$processToUpdate.next(null)
+    this.resetErrorMessages()
+  }
   //create a new stage
   createStage(stageNew: IStageNew) {
 
@@ -199,9 +202,14 @@ export class ProcessService {
     if(stageNew.processId){
       this.httpService.addStage(stageNew).pipe(first()).subscribe({
         next: (stage) =>{
-           let list: IStage[] = [...this.$stageList.getValue()];
-           list.push(stageNew);
-           this.$stageList.next(list);
+          if(this.$processToUpdate.value !== null){
+            let process = {...this.$processToUpdate.value}
+            console.log(process)
+            process.stage.push(stage);
+            console.log(process)
+            this.$processToUpdate.next(process);
+            return true;
+          }
           return true;
         },
         error: (err) => {
@@ -246,7 +254,9 @@ export class ProcessService {
 
   deleteNewStage(stageNew: IStageNew){
     let list: IStage[] = [...this.$stageList.getValue()];
+    console.log(stageNew)
     const i = list.indexOf(stageNew);
+    console.log(i)
     if (i > -1){
       list.splice(i, 1)
     }
@@ -347,9 +357,13 @@ export class ProcessService {
 
   //delete an option for a new stage
   deleteOptionNS(choice: IStageOptions) {
-    const index =this.newStageOptList.indexOf(choice)
-    if (index > -1){
-      this.newStageOptList.splice(index, 1)
+    console.log('deleting choice')
+    console.log(choice)
+    console.log(this.newStageOptList)
+    const i =this.newStageOptList.indexOf(choice)
+    console.log(i)
+    if (i > -1){
+      this.newStageOptList.splice(i, 1)
     }
     console.log(this.newStageOptList)
   }

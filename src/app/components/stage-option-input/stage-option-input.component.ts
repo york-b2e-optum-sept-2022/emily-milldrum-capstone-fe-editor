@@ -21,7 +21,6 @@ export class StageOptionInputComponent implements OnInit {
   onDestroy = new Subject();
   stageToUpdate: IStage | null = null;
   private stageOptions: IStageOptions[] | null = null;
-  //  choiceInput: any;
 
   constructor(private processService: ProcessService) {
     this.processService = processService;
@@ -29,10 +28,7 @@ export class StageOptionInputComponent implements OnInit {
     this.processService.$optionError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
     this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
    this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
-    // if(this.stageToUpdate)
-    // {
-    //   this.processService.$stageOptList.next(this.stageToUpdate.stageOptions)
-    // }
+
   }
 
   ngOnInit(): void {
@@ -44,8 +40,7 @@ export class StageOptionInputComponent implements OnInit {
     if(this.option.id){
       this.processService.deleteOption(this.option.id)
     } else {
-      this.choiceFormat.option = this.choiceEdit
-      this.processService.deleteOptionNS(this.choiceFormat)
+      this.processService.deleteOptionNS(this.option)
     }
   }
 
@@ -96,30 +91,9 @@ export class StageOptionInputComponent implements OnInit {
     this.choiceEdit = "";
   }
 
-  //save brand new field
-  saveChoice() {
-    console.log('save choice')
-  }
-
   //unsubscribing
   ngOnDestroy(): void {
     this.onDestroy.next(null);
     this.onDestroy.complete();
   }
-
-  // //add a response choice
-  // addChoice() {
-  //   //TODO fix the choice input to choice: ??
-  //   if (this.choiceInput == ("" || null)){
-  //     this.processService.$stageError.next(ERROR.STAGE_FIELD_BLANK)
-  //   } else {
-  //     //this.creatingOptions.option = (...this.choiceInput);
-  //     //this.stageOptions.push(this.creatingOptions);
-  //     this.processService.$stageError.next(null)
-  //     console.log(this.choiceInput)
-  //     //console.log(this.stageOptions)
-  //     this.choiceInput = "";
-  //   }
-  //
-  // }
 }

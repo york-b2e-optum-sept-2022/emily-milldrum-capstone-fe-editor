@@ -45,7 +45,7 @@
 
 
   <div class="centering">
-    __________Added Stages (Unsaved until "Update")__________
+    __________Added Stages__________
   </div>
 <!--  render stages being created-->
   <ng-container *ngIf="stageList !== null">
@@ -57,10 +57,10 @@
   <div class="centering" id="error-message">{{errorMessage}}</div>
 
   <ng-container *ngIf="!process">
-    <button class="btn btn-light" (click)="onCreate()">Create</button>
+    <button class="btn btn-light" (click)="onCreateProcess()">Create</button>
   </ng-container>
   <ng-container *ngIf="process">
-    <button class="btn btn-light" (click)="onUpdate()">Update</button>
+    <button class="btn btn-light" (click)="onUpdateProcess()">Update</button>
   </ng-container>
 </div>
 

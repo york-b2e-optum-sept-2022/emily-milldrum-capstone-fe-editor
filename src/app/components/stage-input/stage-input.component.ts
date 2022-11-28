@@ -28,8 +28,6 @@ export class StageInputComponent implements OnInit {
   stageOptCount: number = 0;
 
   creatingOptions: IStageOptions = {option: ""};
- // option: string = "";
-  //curStageOptions: IStageOptions[] = [];
 
   stageOptions: IStageOptions[] = [];
 
@@ -51,18 +49,9 @@ export class StageInputComponent implements OnInit {
 
   process: IProcess | null = null;
 
-  //   = {
-  //   id: 0,
-  //   title: "",
-  //   discontinued: false,
-  //   stage: [],
-  // };
-
   stageOption: IStageOptions = {
     option: ""
   };
-
-
 
   constructor(private modalService: NgbModal, private processService: ProcessService) {
 
@@ -115,7 +104,7 @@ export class StageInputComponent implements OnInit {
       this.processService.createStage(this.stageNew);
 
         //reset
-        this.processService.$processToUpdate.next(null);
+        //
         this.processService.$stageError.next(null)
         this.question = "";
         this.type = "";
@@ -151,9 +140,9 @@ export class StageInputComponent implements OnInit {
 
   //delete a new stage without an id
   onDeleteNew() {
+    console.log('deleting new')
+    console.log(this.stage)
     if(this.stage == null){
-      this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
-    } else if (this.stage.id == undefined) {
       this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
     } else {
       this.processService.deleteNewStage(this.stage);

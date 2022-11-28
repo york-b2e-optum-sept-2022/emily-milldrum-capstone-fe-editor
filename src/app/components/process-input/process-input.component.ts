@@ -62,7 +62,7 @@ export class ProcessInputComponent implements OnInit {
   }
 
   //create a new process with default discontinued as false
-  onCreate() {
+  onCreateProcess() {
     if (this.title == "") {
       this.processService.$processError.next(ERROR.PROCESS_TITLE)
     }else {
@@ -76,7 +76,7 @@ export class ProcessInputComponent implements OnInit {
   }
 
 
-  onUpdate() {
+  onUpdateProcess() {
     if(this.process == null){
       this.processService.$processError.next(ERROR.PROCESS_NULL)
     } else if (this.title == ""){
@@ -90,11 +90,9 @@ export class ProcessInputComponent implements OnInit {
       discontinued: this.discontinued,
       stage: this.process.stage,
     }
+
       this.processService.updateProcess(this.processEdit)
       this.closeThis();
-
-      this.processService.$isCreating.next(false)
-      this.processService.$processToUpdate.next(null);
     }
 
   }
