@@ -47,7 +47,7 @@ export class HttpService {
   // }
 
   deleteStage(stageId: number) {
-    return this.httpClient.delete('http://localhost:8080/api/stage/' + stageId) as Observable<IStage[]>;
+    return this.httpClient.delete('http://localhost:8080/api/stage/' + stageId);
   }
 
   updateStage(stage: IStage) {

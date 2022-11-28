@@ -5,6 +5,7 @@ import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {IStage, IStageNew, IStageOptions} from "../_interfaces/IStage";
 import {IResponse} from "../_interfaces/IResponse";
+import {provideCloudflareLoader} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
@@ -169,7 +170,7 @@ export class ProcessService {
       })
   }
 
-  //rest error messages
+  //reset error messages
   private resetErrorMessages() {
     this.$processError.next(null)
     this.$stageError.next(null)
@@ -183,8 +184,6 @@ export class ProcessService {
 
     //if adding stage to new process
     if(!stageNew.processId){
-      console.log('adding stage to new process')
-      console.log(stageNew);
       let stageCopy = JSON.parse(JSON.stringify(stageNew))
       if(this.stageListCreate == null){ //if stagelist doesnt exist create
         this.stageListCreate = [];
@@ -198,14 +197,11 @@ export class ProcessService {
 
     //if adding stage to existing process
     if(stageNew.processId){
-      console.log('adding stage to existing process')
-      console.log(stageNew);
       this.httpService.addStage(stageNew).pipe(first()).subscribe({
         next: (stage) =>{
            let list: IStage[] = [...this.$stageList.getValue()];
            list.push(stageNew);
            this.$stageList.next(list);
-          console.log(stage)
           return true;
         },
         error: (err) => {
@@ -225,28 +221,36 @@ export class ProcessService {
     this.$stageOptList.next(this.newStageOptList);
    }
 
-   //delete an existing stage
-  deleteStage(id: number) {
-    this.httpService.deleteStage(id).pipe(first()).subscribe({
+   //delete an existing stage with an id
+  deleteStage(stage: IStage) {
+    if(stage.id)
+    this.httpService.deleteStage(stage.id).pipe(first()).subscribe({
       next: () => {
 
-        //TODO refresh page when stage delete, loaded from process.stage
-
-        // let proc = this.$processToUpdate.getValue();
-        // if(proc !== null) {
-        //   this.$stageList.next(proc.stage.filter(stage => stage.id !== id)
-        //   );
-        // }
-        let list: IStage[] = [...this.$stageList.getValue()];
-        this.$stageList.next(
-          list.filter(stage => stage.id !== id)
-        );
+        console.log('stage deleted')
+          let process: IProcess | null = JSON.parse(JSON.stringify(this.$processToUpdate.getValue()));
+        if(process !== null){
+          const i = process.stage.indexOf(stage);
+          process.stage.splice(i, 1);
+          console.log('filtered process')
+          console.log(process.stage)
+          this.$processToUpdate.next(process);
+        }
       },
       error: (err) => {
         console.log(err)
         this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
       }
     })
+  }
+
+  deleteNewStage(stageNew: IStageNew){
+    let list: IStage[] = [...this.$stageList.getValue()];
+    const i = list.indexOf(stageNew);
+    if (i > -1){
+      list.splice(i, 1)
+    }
+    this.$stageList.next(list)
   }
 
   //update an existing stage
@@ -329,12 +333,8 @@ export class ProcessService {
     this.httpService.addOption(choiceFormat).pipe(first()).subscribe({
       next: () =>{
         let list: IStageOptions[] = [...this.$stageOptList.getValue()];
-        const index = list.indexOf({option: ""})
-        if (index > -1){
-          list.splice(index, 1)
-        } else {
-          list.push(choiceFormat);
-        }
+        list.pop()
+        list.push(choiceFormat);
         this.$stageOptList.next(list);
         console.log(list)
       },
@@ -345,6 +345,7 @@ export class ProcessService {
     })
   }
 
+  //delete an option for a new stage
   deleteOptionNS(choice: IStageOptions) {
     const index =this.newStageOptList.indexOf(choice)
     if (index > -1){

@@ -149,16 +149,15 @@ export class StageInputComponent implements OnInit {
     }
   }
 
-  //unsubscribing
-  ngOnDestroy(): void {
-    this.onDestroy.next(null);
-    this.onDestroy.complete();
-  }
-
-  //for closing the editing option
-  closeThis() {
-    this.isEditingStage = false;
-    this.processService.$processToUpdate.next(null);
+  //delete a new stage without an id
+  onDeleteNew() {
+    if(this.stage == null){
+      this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
+    } else if (this.stage.id == undefined) {
+      this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
+    } else {
+      this.processService.deleteNewStage(this.stage);
+      this.deleteAlert = null; }
   }
 
   //confirm delete
@@ -174,7 +173,7 @@ export class StageInputComponent implements OnInit {
     } else if (this.stage.id == undefined) {
       this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
     } else {
-      this.processService.deleteStage(this.stage.id);
+      this.processService.deleteStage(this.stage);
       this.deleteAlert = null; }
 
   }
@@ -184,4 +183,15 @@ export class StageInputComponent implements OnInit {
     this.stageOptions.push({option: ""});
   }
 
+  //unsubscribing
+  ngOnDestroy(): void {
+    this.onDestroy.next(null);
+    this.onDestroy.complete();
+  }
+
+  //for closing the editing option
+  closeThis() {
+    this.isEditingStage = false;
+    this.processService.$processToUpdate.next(null);
+  }
 }

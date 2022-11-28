@@ -40,7 +40,7 @@ export class ProcessInputComponent implements OnInit {
     this.processService.$processError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message)
 
     //get process to update
-    this.processService.$processToUpdate.pipe(first()).subscribe(process => {
+    this.processService.$processToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(process => {
       if (process != null) {
         this.process = process;
       }
@@ -77,7 +77,6 @@ export class ProcessInputComponent implements OnInit {
 
 
   onUpdate() {
-    console.log(this.process)
     if(this.process == null){
       this.processService.$processError.next(ERROR.PROCESS_NULL)
     } else if (this.title == ""){

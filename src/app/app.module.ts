@@ -15,6 +15,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { StageOptionInputComponent } from './components/stage-option-input/stage-option-input.component';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { StageOptionInputComponent } from './components/stage-option-input/stage
         NgbModule,
         FormsModule,
         HttpClientModule,
+      DragDropModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

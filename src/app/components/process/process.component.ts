@@ -3,6 +3,7 @@ import {IProcess} from "../../_interfaces/IProcess";
 import {ProcessService} from "../../services/process.service";
 import {IStage} from "../../_interfaces/IStage";
 import {Subject, takeUntil} from "rxjs";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-process',
@@ -21,6 +22,8 @@ export class ProcessComponent implements OnInit {
   stageList: IStage[] =[];
 
   onDestroy = new Subject();
+  public startPosition: number = 0
+  public endPosition: number = 0
 
   deleteAlert: string | null = null;
   constructor(private processService: ProcessService,) {
@@ -49,18 +52,38 @@ export class ProcessComponent implements OnInit {
   onUpdate() {
     this.processService.$processToUpdate.next(this.process);
     this.processService.$isCreating.next(true)
-    //this.modalService.open(ProcessInputComponent);
+
   }
 
-  // public open(modal: any): void {
-  //   this.modalService.open(modal);
-  // }
-
-  // //open stage input in modal
-  // openThis() {
-  //   this.processService.$processToUpdate.next(this.process)
-  //   this.modalService.open(StageInputComponent);
-  // }
+  drop(event: CdkDragDrop<string[]>) {
+    this.startPosition = event.previousIndex
+    this.endPosition = event.currentIndex
+    if (this.process != null) {
+      if (event.previousIndex < event.currentIndex) {
+        for (let i = 0; i < this.process.stage.length; i++) {
+          if (this.process.stage[i].stageOrder === event.previousIndex) {
+            this.process.stage[i].stageOrder = event.currentIndex
+            continue
+          }
+          if (this.process.stage[i].stageOrder >= this.startPosition && this.process.stage[i].stageOrder <= this.endPosition) {
+            this.process.stage[i].stageOrder = this.process.stage[i].stageOrder - 1
+          }
+        }
+      }
+      if (event.previousIndex > event.currentIndex) {
+        for (let i = 0; i < this.process.stage.length; i++) {
+          if (this.process.stage[i].stageOrder === event.previousIndex) {
+            this.process.stage[i].stageOrder = event.currentIndex
+            continue
+          }
+          if (this.process.stage[i].stageOrder <= this.startPosition && this.process.stage[i].stageOrder >= this.endPosition) {
+            this.process.stage[i].stageOrder = this.process.stage[i].stageOrder + 1
+          }
+        }
+      }
+      moveItemInArray(this.process.stage, event.previousIndex, event.currentIndex);
+    }
+  }
 
   ngOnDestroy(): void {
     this.onDestroy.next(null);

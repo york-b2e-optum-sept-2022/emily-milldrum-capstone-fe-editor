@@ -31,4 +31,34 @@ export class StageListComponent implements OnInit {
     this.onDestroy.complete();
   }
 
+  //
+  // drop(event: CdkDragDrop<string[]>) {
+  //   this.startPosition = event.previousIndex
+  //   this.endPosition = event.currentIndex
+  //   if (this.survey != null) {
+  //     if (event.previousIndex < event.currentIndex) {
+  //       for (let i = 0; i < this.survey.stageSet.length; i++) {
+  //         if (this.survey.stageSet[i].orderStage === event.previousIndex) {
+  //           this.survey.stageSet[i].orderStage = event.currentIndex
+  //           continue
+  //         }
+  //         if (this.survey.stageSet[i].orderStage >= this.startPosition && this.survey.stageSet[i].orderStage <= this.endPosition) {
+  //           this.survey.stageSet[i].orderStage = this.survey.stageSet[i].orderStage - 1
+  //         }
+  //       }
+  //     }
+  //     if (event.previousIndex > event.currentIndex) {
+  //       for (let i = 0; i < this.survey.stageSet.length; i++) {
+  //         if (this.survey.stageSet[i].orderStage === event.previousIndex) {
+  //           this.survey.stageSet[i].orderStage = event.currentIndex
+  //           continue
+  //         }
+  //         if (this.survey.stageSet[i].orderStage <= this.startPosition && this.survey.stageSet[i].orderStage >= this.endPosition) {
+  //           this.survey.stageSet[i].orderStage = this.survey.stageSet[i].orderStage + 1
+  //         }
+  //       }
+  //     }
+  //     moveItemInArray(this.survey.stageSet, event.previousIndex, event.currentIndex);
+  //   }
+  // }
 }
