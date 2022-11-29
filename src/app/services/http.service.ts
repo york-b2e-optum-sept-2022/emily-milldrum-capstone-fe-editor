@@ -29,7 +29,7 @@ export class HttpService {
   }
 
   addStage(stageNew: IStageNew) { //for adding a stage to an existing process
-    return this.httpClient.post('http://localhost:8080/api/stage/addToProcess/', stageNew) as Observable<IStage>;
+    return this.httpClient.post('http://localhost:8080/api/stage/addToProcess/', stageNew) as Observable<IProcess>;
   }
 
 

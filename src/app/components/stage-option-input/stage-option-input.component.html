@@ -3,7 +3,6 @@
     <ng-container *ngIf="isEditingOption">
       <div class="input-group mb-3">
         <span class="input-group-text">
-          <div class="error-message">{{errorMessage}}</div>
           <input name="radio" id="radio_0" type="radio" disabled="true"
                  class="custom-control-input" value="{{option}}"
                      [(ngModel)]="option.option">
@@ -46,7 +45,6 @@
     <ng-container *ngIf="isEditingOption">
       <div class="input-group mb-3">
         <span class="input-group-text">
-          <div class="error-message">{{errorMessage}}</div>
           <input name="checkbox" id="checkbox_0" type="checkbox"
                  disabled="true" class="custom-control-input" value="{{option}}"
                  [(ngModel)]="option.option">

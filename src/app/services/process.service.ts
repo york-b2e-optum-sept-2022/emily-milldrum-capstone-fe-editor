@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpService} from "./http.service";
 import {BehaviorSubject, first} from "rxjs";
 import {ERROR} from "../_enums/ERROR";
 import {IProcess, IProcessNew} from "../_interfaces/IProcess";
 import {IStage, IStageNew, IStageOptions} from "../_interfaces/IStage";
 import {IResponse} from "../_interfaces/IResponse";
-import {provideCloudflareLoader} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ import {provideCloudflareLoader} from "@angular/common";
 export class ProcessService {
 
   //process variables
-  process: IProcess =   {
+  process: IProcess = {
     id: 0,
     title: "",
     discontinued: false,
@@ -26,7 +25,7 @@ export class ProcessService {
 
 
   //stage variables
-  stage: IStage =   {
+  stage: IStage = {
     id: 0,
     //processId: 0,
     question: "",
@@ -38,7 +37,8 @@ export class ProcessService {
   stageList: IStage[] = [];
   $stageError = new BehaviorSubject<string | null>(null);
   $stageToUpdate = new BehaviorSubject<IStage | null>(null);
-  $stageList = new BehaviorSubject<IStage[]>([])
+  $WIPstageList = new BehaviorSubject<IStage[]>([])
+  $stageListExisting = new BehaviorSubject<IStage[]>([]);
   $isCreating = new BehaviorSubject<boolean>(false)
   $isEditingStage = new BehaviorSubject<boolean>(false);
 
@@ -53,16 +53,16 @@ export class ProcessService {
   $responseList = new BehaviorSubject<IResponse[]>([])
 
 
-
-  constructor( private httpService: HttpService) {
+  constructor(private httpService: HttpService) {
     this.getAllProcess();
   }
 
 
   //get a list of all processes
-  getAllProcess(){
+  getAllProcess() {
     this.httpService.getProcessList().pipe(first()).subscribe({
-      next: (processList) => {this.processList = processList;
+      next: (processList) => {
+        this.processList = processList;
         this.$processList.next(processList)
       },
       error: (err) => {
@@ -73,10 +73,11 @@ export class ProcessService {
   }
 
   //get a list of all stages
-  getAllStages(){
+  getAllStages() {
     this.httpService.getStageList().pipe(first()).subscribe({
-      next: (stageList) => {this.stageList = stageList;
-        this.$stageList.next(stageList)
+      next: (stageList) => {
+        this.stageList = stageList;
+        this.$WIPstageList.next(stageList)
       },
       error: (err) => {
         console.error(err);
@@ -86,7 +87,7 @@ export class ProcessService {
   }
 
   //get response list
-  getResponseList(selectedProcess: IProcess){
+  getResponseList(selectedProcess: IProcess) {
     this.httpService.getResponseListById(selectedProcess.id).pipe(first()).subscribe({
       next: (responseList) => {
         this.$responseList.next(responseList)
@@ -102,31 +103,26 @@ export class ProcessService {
   //create a new process
   createProcess(processNew: IProcessNew) {
     //if stage is empty throw this error
-   if(this.stageListCreate == null){
-     this.$processError.next(ERROR.PROCESS_ADD_STAGE)
-     return false;
-   } else {     //set stages
-     processNew.stage = this.stageListCreate;
-     console.log('ps after pushing stages to process')
-     console.log(processNew.stage)
-
-   console.log('ps what gets sent to http service')
-   console.log(processNew);
-    this.httpService.createProcess(processNew).pipe(first()).subscribe({
-      next: (process) =>{
-        let newProcessList: IProcess[] = [...this.$processList.getValue()];
-        newProcessList.push(process);
-        this.$processList.next(newProcessList)
-      },
-      error: (err) => {
-        console.log(err)
-        this.$processError.next(ERROR.PROCESS_ADD_ERROR)
-      }
-    })
-     this.$isCreating.next(false)
-     this.resetAll()
-     return true;
-   }
+    if (this.stageListCreate == null) {
+      this.$processError.next(ERROR.PROCESS_ADD_STAGE)
+      return false;
+    } else {     //set stages
+      processNew.stage = this.stageListCreate;
+      this.httpService.createProcess(processNew).pipe(first()).subscribe({
+        next: (process) => {
+          let newProcessList: IProcess[] = [...this.$processList.getValue()];
+          newProcessList.push(process);
+          this.$processList.next(newProcessList)
+        },
+        error: (err) => {
+          console.log(err)
+          this.$processError.next(ERROR.PROCESS_ADD_ERROR)
+        }
+      })
+      this.$isCreating.next(false)
+      this.resetAll()
+      return true;
+    }
   }
 
   //delete an existing process
@@ -134,9 +130,9 @@ export class ProcessService {
     this.httpService.deleteProcess(processId).pipe(first()).subscribe({
       next: () => {
         let list: IProcess[] = [...this.$processList.getValue()];
-          this.$processList.next(
-            list.filter(process => process.id !== processId)
-            );
+        this.$processList.next(
+          list.filter(process => process.id !== processId)
+        );
       },
       error: (err) => {
         console.log(err)
@@ -149,126 +145,118 @@ export class ProcessService {
   updateProcess(processEdit: IProcess) {
     this.httpService.updateProcess(processEdit).pipe(first()).subscribe({
       next: (newProc) => {
-          let processList: IProcess[] = [...this.$processList.getValue()];
-          this.$processList.next(
-            processList.map((product) => {
-              if (product.id !== processEdit.id) {
-                return product;
-              }
-              return newProc;
-            })
-          );
-          this.$processToUpdate.next(null);
-          this.resetAll()
-        },
-          error: (err) => {
-          console.error(err);
-          this.$processError.next(ERROR.PROCESSES_HTTP_ERROR)
-        }
-      })
+        let processList: IProcess[] = [...this.$processList.getValue()];
+        this.$processList.next(
+          processList.map((product) => {
+            if (product.id !== processEdit.id) {
+              return product;
+            }
+            return newProc;
+          })
+        );
+        this.$processToUpdate.next(null);
+        this.resetAll()
+      },
+      error: (err) => {
+        console.error(err);
+        this.$processError.next(ERROR.PROCESSES_HTTP_ERROR)
+      }
+    })
   }
 
   //reset error messages
-  private resetErrorMessages() {
+  resetErrorMessages() {
     this.$processError.next(null)
     this.$stageError.next(null)
     this.$optionError.next(null)
   }
 
-  private resetAll(){
-    this.$stageList.next([])
+  resetAll() {
+    this.stageList = []
+    this.stageListCreate = null
+    this.$WIPstageList.next([])
+    this.$stageListExisting.next([])
     this.$processToUpdate.next(null)
     this.resetErrorMessages()
   }
+
   //create a new stage
   createStage(stageNew: IStageNew) {
-
     stageNew.stageOptions = this.newStageOptList;
 
+    stageNew.stageOptions.forEach(i =>
+    {
+      console.log(i.option)
+      if (i.option == ''){
+        this.$optionError.next(ERROR.OPTION_VALUE_EMPTY)
+      }
+    })
+
     //if adding stage to new process
-    if(!stageNew.processId){
+    if (!stageNew.processId) {
       let stageCopy = JSON.parse(JSON.stringify(stageNew))
-      if(this.stageListCreate == null){ //if stagelist doesnt exist create
+      if (this.stageListCreate == null) { //if stagelist doesnt exist create
         this.stageListCreate = [];
         this.stageListCreate.push(stageCopy);
       } else { //push stage to existing stagelist
         this.stageListCreate.push(stageCopy);
       }
-      console.log(this.stageList)
-      this.$stageList.next(this.stageListCreate);
+      this.$WIPstageList.next(this.stageListCreate);
     }
 
     //if adding stage to existing process
-    if(stageNew.processId){
+    if (stageNew.processId) {
+      this.stageList = [...this.$stageListExisting.value];
       this.httpService.addStage(stageNew).pipe(first()).subscribe({
-        next: (stage) =>{
-          if(this.$processToUpdate.value !== null){
-            let process = {...this.$processToUpdate.value}
-            console.log(process)
-            process.stage.push(stage);
-            console.log(process)
-            this.$processToUpdate.next(process);
-            return true;
-          }
-          return true;
+        next: (process) => {
+          this.stageList = process.stage
+          this.$stageListExisting.next(this.stageList);
         },
         error: (err) => {
           console.log(err)
           this.$processError.next(ERROR.STAGE_ADD_ERROR)
-          return false;
         }
       })
     }
-
-
-    //   let stageCopy = JSON.parse(JSON.stringify(stageNew))
-    //   this.stageListCreate.push(stageCopy);
-    //   this.$stageList.next(this.stageListCreate);
+    if(this.$optionError == null)
     //reset the stage option list
-       this.newStageOptList = []
-    this.$stageOptList.next(this.newStageOptList);
-   }
+      this.newStageOptList = []
+      this.$stageOptList.next(this.newStageOptList);
 
-   //delete an existing stage with an id
-  deleteStage(stage: IStage) {
-    if(stage.id)
-    this.httpService.deleteStage(stage.id).pipe(first()).subscribe({
-      next: () => {
-
-        console.log('stage deleted')
-          let process: IProcess | null = JSON.parse(JSON.stringify(this.$processToUpdate.getValue()));
-        if(process !== null){
-          const i = process.stage.indexOf(stage);
-          process.stage.splice(i, 1);
-          console.log('filtered process')
-          console.log(process.stage)
-          this.$processToUpdate.next(process);
-        }
-      },
-      error: (err) => {
-        console.log(err)
-        this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
-      }
-    })
   }
 
-  deleteNewStage(stageNew: IStageNew){
-    let list: IStage[] = [...this.$stageList.getValue()];
+  //delete an existing stage with an id
+  deleteStage(stage: IStage) {
+    if (stage.id)
+      this.httpService.deleteStage(stage.id).pipe(first()).subscribe({
+        next: () => {
+          this.stageList = [...this.$stageListExisting.value];
+          this.$stageListExisting.next(this.stageList.filter(incStage => incStage !== stage));
+        },
+        error: (err) => {
+          console.log(err)
+          this.$stageError.next(ERROR.STAGES_HTTP_ERROR)
+        }
+      })
+  }
+
+  deleteNewStage(stageNew: IStageNew) {
+    let list: IStage[] = [...this.$WIPstageList.getValue()];
     console.log(stageNew)
     const i = list.indexOf(stageNew);
     console.log(i)
-    if (i > -1){
+    if (i > -1) {
       list.splice(i, 1)
     }
-    this.$stageList.next(list)
+    this.$WIPstageList.next(list)
   }
 
   //update an existing stage
   updateStage(stage: IStage) {
     this.httpService.updateStage(stage).pipe(first()).subscribe({
       next: (newStage) => {
-        let stageList: IStage[] = [...this.$stageList.getValue()];
-        this.$stageList.next(
+        let stageList: IStage[] = [...this.$WIPstageList.getValue()];
+        this.$WIPstageList.next(
           stageList.map((incStage) => {
             if (incStage.id !== stage.id) {
               return stage;
@@ -290,8 +278,7 @@ export class ProcessService {
   //update an existing stage: option in db
   updateOption(option: IStageOptions) {
     this.httpService.updateOption(option).pipe(first()).subscribe({
-      next: (option) => {
-        console.log(option)
+      next: () => {
         this.resetErrorMessages();
       },
       error: (err) => {
@@ -319,12 +306,12 @@ export class ProcessService {
     })
   }
 
- // i: number = 0;
+  // i: number = 0;
   //add new option to new stage
   addOptionNS(choice: IStageOptions) {
     console.log(this.newStageOptList)
     let i = this.newStageOptList.indexOf(this.stageOption);
-    if(i > -1){
+    if (i > -1) {
       this.newStageOptList[i] = choice;
       //
       this.$stageOptList.next(this.newStageOptList)
@@ -334,6 +321,7 @@ export class ProcessService {
     }
     console.log(this.newStageOptList)
     this.$stageOptList.next(this.newStageOptList)
+    this.resetErrorMessages()
     // this.i += 1;
     // console.log(this.i)
   }
@@ -341,12 +329,13 @@ export class ProcessService {
   //add new option to existing stage: choice
   addOption(choiceFormat: IStageOptions) {
     this.httpService.addOption(choiceFormat).pipe(first()).subscribe({
-      next: () =>{
+      next: () => {
         let list: IStageOptions[] = [...this.$stageOptList.getValue()];
         list.pop()
         list.push(choiceFormat);
         this.$stageOptList.next(list);
         console.log(list)
+        this.resetErrorMessages()
       },
       error: (err) => {
         console.log(err)
@@ -360,9 +349,9 @@ export class ProcessService {
     console.log('deleting choice')
     console.log(choice)
     console.log(this.newStageOptList)
-    const i =this.newStageOptList.indexOf(choice)
+    const i = this.newStageOptList.indexOf(choice)
     console.log(i)
-    if (i > -1){
+    if (i > -1) {
       this.newStageOptList.splice(i, 1)
     }
     console.log(this.newStageOptList)

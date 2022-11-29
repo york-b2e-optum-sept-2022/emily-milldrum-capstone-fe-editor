@@ -64,3 +64,10 @@ body {
   padding-right: 2rem;
   padding-bottom: 4rem;
 }
+
+.table-alignment, .td-align{
+  text-align: left;
+  justify-content: flex-start;
+  width: 48%;
+}
+

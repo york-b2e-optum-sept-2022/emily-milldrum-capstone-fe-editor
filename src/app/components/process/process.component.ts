@@ -27,9 +27,10 @@ export class ProcessComponent implements OnInit {
 
   deleteAlert: string | null = null;
   constructor(private processService: ProcessService,) {
-    this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(
+    this.processService.$WIPstageList.pipe(takeUntil(this.onDestroy)).subscribe(
       stageList => this.stageList = stageList
     );
+
   }
 
   ngOnInit(): void {
@@ -52,7 +53,7 @@ export class ProcessComponent implements OnInit {
   onUpdate() {
     this.processService.$processToUpdate.next(this.process);
     this.processService.$isCreating.next(true)
-
+    this.processService.$stageListExisting.next(this.process.stage)
   }
 
   drop(event: CdkDragDrop<string[]>) {

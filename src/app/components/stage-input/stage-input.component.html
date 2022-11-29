@@ -1,7 +1,7 @@
 <ng-container *ngIf="isEditingStage || !stage ">
   <div class="card-body">
     <div class="container">
-      <div class="card shadow">
+      <div>
         <div class="card-body">
           <div class="close-button" *ngIf="stage">
             <button class="btn btn-dark" (click)="closeThis()">
@@ -71,15 +71,7 @@
               [option]="option"
               [type]="type"
             ></app-stage-option-input>
-
-<!--            -->
-<!--            <div *ngFor="let choice of stageOptions" class="col-8">-->
-<!--              <div class="custom-control custom-radio custom-control-inline">-->
-<!--                <input name="radio" id="radio_0" type="radio" class="custom-control-input" value="{{choice.option}}" [(ngModel)]="choice.option === option">-->
-<!--                <label for="{{choice}}" class="custom-control-label">&nbsp; {{choice.option}}</label>-->
-<!--              </div>-->
-<!--            </div>-->
-
+            <div class="error-message">{{errorMessage2}}</div>
           </ng-container>
 
 
@@ -119,6 +111,7 @@
               ></app-stage-option-input>
 
             </div>
+            <div class="error-message">{{errorMessage2}}</div>
           </ng-container>
 
 
@@ -143,21 +136,18 @@
 <ng-container *ngIf="!isEditingStage && stage !== null">
   <div class="card-body">
     <div class="container">
-      <div class="card shadow">
+      <div>
         <div class="card-body">
           <table  class="table table-light">
             <tbody>
-
-              <th scope="row">id: {{stage.id}}</th>
-
-
+              <tr><ul><div class="font-green">id:</div> {{stage.id}}</ul></tr>
               <tr><ul><div class="font-green">order:</div> {{stage.stageOrder}}</ul></tr>
               <tr><ul><div class="font-green">prompt:</div> {{stage.question}}</ul></tr>
               <tr><ul><div class="font-green">type:</div> {{stage.type}}</ul></tr>
               <tr *ngIf="(type == 'Multiple Choice: Multiple')||(type == 'Multiple Choice: Single')"><ul><div class="font-green"># options:</div> {{stageOptCount}}</ul></tr>
             </tbody>
           </table>
-          <div class="centering" class="error-message">{{errorMessage}}</div>
+          <div class="error-message, centering">{{errorMessage}}</div>
           <div class="modify-buttons">
 
             <button class="btn btn-light" (click)="onEdit()">
@@ -189,9 +179,7 @@
             <ng-container *ngIf="deleteAlert">
               <button class="btn btn-light" (click)="onDeleteConfirm()">DELETE</button>
             </ng-container>
-
           </div>
-
         </div>
       </div>
     </div>

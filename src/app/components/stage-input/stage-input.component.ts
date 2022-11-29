@@ -14,6 +14,7 @@ import {ERROR} from "../../_enums/ERROR";
 export class StageInputComponent implements OnInit {
 
   errorMessage: string | null = null;
+  errorMessage2: string | null = null;
   onDestroy = new Subject();
 
 
@@ -56,6 +57,7 @@ export class StageInputComponent implements OnInit {
   constructor(private modalService: NgbModal, private processService: ProcessService) {
 
     this.processService.$stageError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
+    this.processService.$optionError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage2 = message);
     this.processService.$isEditingStage.pipe(takeUntil(this.onDestroy)).subscribe(status => this.isEditingStage = status);
 
     this.processService.$processToUpdate.pipe(first()).subscribe(process => {
@@ -80,13 +82,20 @@ export class StageInputComponent implements OnInit {
 
   //create a new stage check for question, null process, ensure at least 2 options entered
   onCreate() {
+    let blankOpt = false;
+    this.stageOptions.forEach(i =>
+    {
+      if (i.option == ''){
+        blankOpt = true;
+      }
+    })
 
     if (this.question == ""){
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
     } else if (this.type == "") {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
-    // } else if (this.process == null) {
-    //   this.processService.$stageError.next(ERROR.STAGE_PROCESS_NULL)
+    } else if (blankOpt)    {
+      this.processService.$optionError.next(ERROR.OPTION_VALUE_EMPTY)
     } else if (this.type == 'Multiple Choice: Single' && this.stageOptions.length < 2){
       this.processService.$stageError.next(ERROR.STAGE_OPTION_ADD_MORE)
     } else if (this.type == 'Multiple Choice: Multiple' && this.stageOptions.length < 2) {
@@ -104,14 +113,15 @@ export class StageInputComponent implements OnInit {
       this.processService.createStage(this.stageNew);
 
         //reset
-        //
-        this.processService.$stageError.next(null)
-        this.question = "";
-        this.type = "";
-        this.choiceInput = "";
-        this.stageOrder = 0;
-        this.stageOptions = []
-        this.closeThis();
+        if (this.errorMessage2 == null){
+          this.processService.$stageError.next(null)
+          this.question = "";
+          this.type = "";
+          this.choiceInput = "";
+          this.stageOrder = 0;
+          this.stageOptions = []
+          this.closeThis();}
+
 
     }
   }

@@ -34,22 +34,19 @@
   <app-stage-input></app-stage-input>
 
   <div class="centering">
-    __________Existing Stages Management__________
+    __________Stage Management__________
   </div>
 
   <ng-container *ngIf="process !== null">
-    <app-stage-input *ngFor="let stages of process.stage"
+    <app-stage-input *ngFor="let stages of stageListExisting"
                      [stage]="stages">
     </app-stage-input>
   </ng-container>
 
 
-  <div class="centering">
-    __________Added Stages__________
-  </div>
 <!--  render stages being created-->
-  <ng-container *ngIf="stageList !== null">
-    <app-stage-input *ngFor="let stages of stageList"
+  <ng-container *ngIf="stageListCreate !== null">
+    <app-stage-input *ngFor="let stages of stageListCreate"
                      [stage]="stages">
     </app-stage-input>
   </ng-container>

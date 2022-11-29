@@ -24,15 +24,12 @@ export class StageOptionInputComponent implements OnInit {
 
   constructor(private processService: ProcessService) {
     this.processService = processService;
-
     this.processService.$optionError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
     this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
-   this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
-
+    this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
   }
 
   ngOnInit(): void {
-
   }
 
   //delete an option
@@ -78,8 +75,6 @@ export class StageOptionInputComponent implements OnInit {
             this.processService.addOptionNS(this.choiceFormat)
             this.isEditingOption = false;
           }
-
-
         }
     }
   }

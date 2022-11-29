@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProcessService} from "../../services/process.service";
-import {first, Subject, takeUntil} from "rxjs";
+import {Subject, takeUntil} from "rxjs";
 import {ERROR} from "../../_enums/ERROR";
 import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -17,7 +17,8 @@ export class ProcessInputComponent implements OnInit {
   errorMessage: string | null = null;
   @Input()process: IProcess | null = null;
   onDestroy = new Subject();
-  stageList: IStage[] | null = null;
+  stageListCreate: IStage[] | null = null;
+  stageListExisting: IStage[] | null = null;
 
   processEdit: IProcess =
     {
@@ -47,8 +48,14 @@ export class ProcessInputComponent implements OnInit {
     })
 
     //get creating stagelist
-    this.processService.$stageList.pipe(takeUntil(this.onDestroy)).subscribe(sl => {
-        this.stageList = sl;
+    this.processService.$WIPstageList.pipe(takeUntil(this.onDestroy)).subscribe(sl => {
+        this.stageListCreate = sl;
+    })
+
+
+    //get existing stagelist
+    this.processService.$stageListExisting.pipe(takeUntil(this.onDestroy)).subscribe(sl => {
+      this.stageListExisting = sl;
     })
   }
 
