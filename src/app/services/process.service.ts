@@ -294,6 +294,7 @@ export class ProcessService {
     this.httpService.deleteOption(id).pipe(first()).subscribe({
       next: () => {
         let copyOptList: IStageOptions[] = [...this.$stageOptList.getValue()];
+        console.log(copyOptList)
         this.$stageOptList.next(
           copyOptList.filter(stageOption => stageOption.id !== id)
         );
@@ -331,7 +332,10 @@ export class ProcessService {
     this.httpService.addOption(choiceFormat).pipe(first()).subscribe({
       next: () => {
         let list: IStageOptions[] = [...this.$stageOptList.getValue()];
-        list.pop()
+        let i = list.length -1;
+        if(list[i].option == ''){
+          list.pop()
+        }
         list.push(choiceFormat);
         this.$stageOptList.next(list);
         console.log(list)

@@ -66,6 +66,7 @@ export class StageInputComponent implements OnInit {
       }
     })
     this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
+
   }
 
   ngOnInit(): void {
@@ -78,6 +79,8 @@ export class StageInputComponent implements OnInit {
     if(this.stage?.stageOptions){
       this.stageOptions = this.stage?.stageOptions
     this.stageOptCount = this.stageOptions.length}
+
+
   }
 
   //create a new stage check for question, null process, ensure at least 2 options entered
@@ -135,6 +138,8 @@ export class StageInputComponent implements OnInit {
 
   //
   onUpdate() {
+    console.log(this.stageOptions)
+      this.processService.$stageOptList.next(this.stageOptions)
       if (this.stage == null) {
         this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
       } else if(this.question == ""){
@@ -167,6 +172,7 @@ export class StageInputComponent implements OnInit {
 
   //execute delete after confirm
   onDeleteConfirm() {
+    this.processService.$stageOptList.next(this.stageOptions)
     if(this.stage == null){
       this.processService.$stageError.next(ERROR.STAGE_IS_NULL)
     } else if (this.stage.id == undefined) {

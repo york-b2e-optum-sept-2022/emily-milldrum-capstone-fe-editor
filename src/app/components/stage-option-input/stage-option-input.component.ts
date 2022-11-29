@@ -3,6 +3,7 @@ import {IStage, IStageOptions} from "../../_interfaces/IStage";
 import {ProcessService} from "../../services/process.service";
 import {ERROR} from "../../_enums/ERROR";
 import {Subject, takeUntil} from "rxjs";
+import * as Console from "console";
 
 @Component({
   selector: 'app-stage-option-input',
@@ -50,9 +51,6 @@ export class StageOptionInputComponent implements OnInit {
 
   //update the selected choice
   updateChoice() {
-    if(this.stageToUpdate){
-      this.processService.$stageOptList.next(this.stageToUpdate.stageOptions)
-    }
     if(this.choiceEdit == ""){
       this.processService.$optionError.next(ERROR.OPTION_VALUE_EMPTY)
     } else {

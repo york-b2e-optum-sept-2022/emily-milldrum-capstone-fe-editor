@@ -38,25 +38,25 @@
           <div class="centering">Drag to reorder stages</div>
           <div class="container">
             <div class="container">
-          <table class="table table-light">
-            <tbody>
-            <tr class="table-alignment">
-              <th scope="row" colspan="1">Stage Order</th>
-              <th  class="td-align" >Prompt</th>
-              <th  class="td-align" >Type</th>
-              <th scope="row" colspan="1"># Options</th>
-            </tr>
-            </tbody>
-          </table>
+              <table class="table table-light">
+                <tbody>
+                <tr class="table-alignment">
+                  <th scope="row" colspan="1">Stage Order</th>
+                  <th class="td-align">Prompt</th>
+                  <th class="td-align">Type</th>
+                  <th scope="row" colspan="1"># Options</th>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div cdkDropList class="example-list me-5 ms-5" (cdkDropListDropped)="drop($event)">
-        <app-stage *ngFor="let stages of process.stage"
-                   [stage]="stages" cdkDrag>
+            <app-stage *ngFor="let stages of process.stage"
+                       [stage]="stages" cdkDrag>
 
-        </app-stage>
-            </div>
-      </ng-container>
+            </app-stage>
+          </div>
+        </ng-container>
 
         <div class="centering">
           <button class="btn btn-light" (click)="viewResponses()">View Responses</button>
@@ -101,20 +101,27 @@
       <ng-template ngbPanelContent>
 
         <div class="centering"><h3>Prompts</h3></div>
-        <table class="table table-light">
-          <tbody>
-          <tr>
-            <th scope="row" colspan="1">  </th>
-            <td></td>
-            </tr>
+        <div class="container">
+          <div class="container">
+            <table class="example-list me-5 ms-5">
+              <tbody>
+              <tr class="table-alignment">
+                <th scope="row" colspan="1">Stage Order</th>
+                <th class="td-align">Prompt</th>
+                <th class="td-align">Type</th>
+                <th scope="row" colspan="1"># Options</th>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-        <ng-container *ngIf="process.stage !== undefined">
+        <div class="example-list me-5 ms-5"><ng-container *ngIf="process.stage !== undefined">
           <app-stage *ngFor="let stages of process.stage"
                      [stage]="stages">
           </app-stage>
-        </ng-container>
-          </tbody>
-        </table>
+        </ng-container></div>
+
 
         <div class="centering">
           <button class="btn btn-light" (click)="viewResponses()">View Responses</button>

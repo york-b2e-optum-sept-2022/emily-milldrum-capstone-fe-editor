@@ -33,9 +33,22 @@
 <!-- render existing stages-->
   <app-stage-input></app-stage-input>
 
+
+<!--  __________Stage LIST COMPONENET-->
+<!--  <ng-container *ngIf="process !== null">-->
+<!--    <app-stage-list *ngFor="let stages of stageListExisting"-->
+<!--                     [stage]="stages">-->
+<!--    </app-stage-list>-->
+<!--  </ng-container>-->
+
   <div class="centering">
-    __________Stage Management__________
+    <h3 class="text-center pt-3">Stage Management</h3>
   </div>
+
+  <div class="centering">
+    ___________________________________
+  </div>
+
 
   <ng-container *ngIf="process !== null">
     <app-stage-input *ngFor="let stages of stageListExisting"
