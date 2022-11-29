@@ -184,10 +184,9 @@ export class ProcessService {
   createStage(stageNew: IStageNew) {
     stageNew.stageOptions = this.newStageOptList;
 
-    stageNew.stageOptions.forEach(i =>
-    {
+    stageNew.stageOptions.forEach(i => {
       console.log(i.option)
-      if (i.option == ''){
+      if (i.option == '') {
         this.$optionError.next(ERROR.OPTION_VALUE_EMPTY)
       }
     })
@@ -218,10 +217,10 @@ export class ProcessService {
         }
       })
     }
-    if(this.$optionError == null)
-    //reset the stage option list
+    if (this.$optionError == null)
+      //reset the stage option list
       this.newStageOptList = []
-      this.$stageOptList.next(this.newStageOptList);
+    this.$stageOptList.next(this.newStageOptList);
 
   }
 
@@ -292,13 +291,8 @@ export class ProcessService {
   //delete an existing stage: option in db
   deleteOption(id: number) {
     this.httpService.deleteOption(id).pipe(first()).subscribe({
-      next: () => {
-        let copyOptList: IStageOptions[] = [...this.$stageOptList.getValue()];
-        console.log(copyOptList)
-        this.$stageOptList.next(
-          copyOptList.filter(stageOption => stageOption.id !== id)
-        );
-        console.log('success')
+      next: (stage) => {
+        this.$stageOptList.next(stage.stageOptions)
       },
       error: (err) => {
         console.log(err)
@@ -307,14 +301,12 @@ export class ProcessService {
     })
   }
 
-  // i: number = 0;
   //add new option to new stage
   addOptionNS(choice: IStageOptions) {
     console.log(this.newStageOptList)
     let i = this.newStageOptList.indexOf(this.stageOption);
     if (i > -1) {
       this.newStageOptList[i] = choice;
-      //
       this.$stageOptList.next(this.newStageOptList)
 
     } else {
@@ -330,15 +322,8 @@ export class ProcessService {
   //add new option to existing stage: choice
   addOption(choiceFormat: IStageOptions) {
     this.httpService.addOption(choiceFormat).pipe(first()).subscribe({
-      next: () => {
-        let list: IStageOptions[] = [...this.$stageOptList.getValue()];
-        let i = list.length -1;
-        if(list[i].option == ''){
-          list.pop()
-        }
-        list.push(choiceFormat);
-        this.$stageOptList.next(list);
-        console.log(list)
+      next: (stage) => {
+        this.$stageOptList.next(stage.stageOptions)
         this.resetErrorMessages()
       },
       error: (err) => {

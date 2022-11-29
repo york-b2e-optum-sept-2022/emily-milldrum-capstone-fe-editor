@@ -135,8 +135,7 @@ export class StageInputComponent implements OnInit {
     this.isEditingStage = true;
   }
 
-
-  //
+  //update this stage
   onUpdate() {
     console.log(this.stageOptions)
       this.processService.$stageOptList.next(this.stageOptions)

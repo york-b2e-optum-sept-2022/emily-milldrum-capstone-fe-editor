@@ -21,13 +21,11 @@ export class StageOptionInputComponent implements OnInit {
   errorMessage: string | null = null;
   onDestroy = new Subject();
   stageToUpdate: IStage | null = null;
-  private stageOptions: IStageOptions[] | null = null;
 
   constructor(private processService: ProcessService) {
     this.processService = processService;
     this.processService.$optionError.pipe(takeUntil(this.onDestroy)).subscribe(message => this.errorMessage = message);
     this.processService.$stageToUpdate.pipe(takeUntil(this.onDestroy)).subscribe(stage => this.stageToUpdate = stage);
-    this.processService.$stageOptList.pipe(takeUntil(this.onDestroy)).subscribe(stageOptions => this.stageOptions = stageOptions);
   }
 
   ngOnInit(): void {

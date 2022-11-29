@@ -61,7 +61,7 @@ export class HttpService {
   }
 
   deleteOption(id: number) {
-    return this.httpClient.delete('http://localhost:8080/api/stageOptions/' + id) as Observable<IStageOptions[]>;
+    return this.httpClient.delete('http://localhost:8080/api/stageOptions/' + id) as Observable<IStage>;
   }
 
   //response requests
