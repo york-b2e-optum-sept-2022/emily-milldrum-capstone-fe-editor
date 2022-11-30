@@ -199,8 +199,10 @@ export class ProcessService {
         this.stageListCreate.push(stageCopy);
       } else { //push stage to existing stagelist
         this.stageListCreate.push(stageCopy);
-      }
+      } // reset wip stage list
       this.$WIPstageList.next(this.stageListCreate);
+      this.newStageOptList = []
+      this.$stageOptList.next(this.newStageOptList);
     }
 
     //if adding stage to existing process
@@ -220,7 +222,7 @@ export class ProcessService {
     if (this.$optionError == null)
       //reset the stage option list
       this.newStageOptList = []
-    this.$stageOptList.next(this.newStageOptList);
+      this.$stageOptList.next(this.newStageOptList);
 
   }
 
