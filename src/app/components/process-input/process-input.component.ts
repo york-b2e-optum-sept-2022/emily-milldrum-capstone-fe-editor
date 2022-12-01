@@ -5,6 +5,7 @@ import {ERROR} from "../../_enums/ERROR";
 import {IProcess, IProcessNew} from "../../_interfaces/IProcess";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {IStage} from "../../_interfaces/IStage";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-process-input',
@@ -19,6 +20,11 @@ export class ProcessInputComponent implements OnInit {
   onDestroy = new Subject();
   stageListCreate: IStage[] | null = null;
   stageListExisting: IStage[] | null = null;
+
+  stageReordering: boolean = false;
+
+  public startPosition: number = 0
+  public endPosition: number = 0
 
   processEdit: IProcess =
     {
@@ -111,10 +117,53 @@ export class ProcessInputComponent implements OnInit {
   }
 
   //for closing the modal
+
   closeThis() {
     //this.modalService.dismissAll()
     this.processService.$isCreating.next(false)
     this.processService.$processToUpdate.next(null);
   }
 
+  drop(event: CdkDragDrop<string[]>) {
+    this.startPosition = event.previousIndex
+    this.endPosition = event.currentIndex
+    if (this.process != null) {
+      if (event.previousIndex < event.currentIndex) {
+        for (let i = 0; i < this.process.stage.length; i++) {
+          if (this.process.stage[i].stageOrder === event.previousIndex) {
+            this.process.stage[i].stageOrder = event.currentIndex
+            continue
+          }
+          if (this.process.stage[i].stageOrder >= this.startPosition && this.process.stage[i].stageOrder <= this.endPosition) {
+            this.process.stage[i].stageOrder = this.process.stage[i].stageOrder - 1
+          }
+        }
+      }
+      if (event.previousIndex > event.currentIndex) {
+        for (let i = 0; i < this.process.stage.length; i++) {
+          if (this.process.stage[i].stageOrder === event.previousIndex) {
+            this.process.stage[i].stageOrder = event.currentIndex
+            continue
+          }
+          if (this.process.stage[i].stageOrder <= this.startPosition && this.process.stage[i].stageOrder >= this.endPosition) {
+            this.process.stage[i].stageOrder = this.process.stage[i].stageOrder + 1
+          }
+        }
+      }
+      moveItemInArray(this.process.stage, event.previousIndex, event.currentIndex);
+    }
+  }
+
+  saveOrder() {
+    console.log('save order')
+    console.log(this.process)
+    if(this.process !== null)
+    {
+      this.processService.saveOrder(this.process)
+    }
+  }
+  //
+  // reorderStages() {
+  //   this.stageReordering = true;
+  // }
 }

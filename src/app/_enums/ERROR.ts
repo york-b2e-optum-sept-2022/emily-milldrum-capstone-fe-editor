@@ -4,6 +4,7 @@ export enum ERROR {
   //processes
 
 
+  PROCESS_ORDER_SAVED = "SUCCESS: Process order successfully saved",
   PROCESS_ADD_STAGE ="ERROR: There must be at least one stage on a process",
   PROCESS_NULL = "ERROR: The process is null",
   PROCESS_ADD_ERROR = "ERROR: There was an error adding a process",

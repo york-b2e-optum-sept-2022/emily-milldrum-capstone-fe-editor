@@ -97,7 +97,7 @@ export class StageInputComponent implements OnInit {
       this.processService.$stageError.next(ERROR.STAGE_QUESTION_BLANK)
     } else if (this.type == "") {
       this.processService.$stageError.next(ERROR.STAGE_TYPE_SELECT)
-    } else if (blankOpt)    {
+    } else if (blankOpt){
       this.processService.$optionError.next(ERROR.OPTION_VALUE_EMPTY)
     } else if (this.type == 'Multiple Choice: Single' && this.stageOptions.length < 2){
       this.processService.$stageError.next(ERROR.STAGE_OPTION_ADD_MORE)
@@ -114,7 +114,6 @@ export class StageInputComponent implements OnInit {
         this.stageNew.processId = this.process.id;
       }
       this.processService.createStage(this.stageNew);
-
         //reset
         if (this.errorMessage2 == null){
           this.processService.$stageError.next(null)
@@ -124,8 +123,6 @@ export class StageInputComponent implements OnInit {
           this.stageOrder = 0;
           this.stageOptions = []
           this.closeThis();}
-
-
     }
   }
 

@@ -287,7 +287,6 @@ export class ProcessService {
         this.$stageError.next(ERROR.OPTION_HTTP_ERROR)
       }
     })
-
   }
 
   //delete an existing stage: option in db
@@ -348,4 +347,25 @@ export class ProcessService {
     console.log(this.newStageOptList)
   }
 
+  saveOrder(process: IProcess) {
+    this.httpService.updateProcess(process).pipe(first()).subscribe({
+      next: (newProc) => {
+        let processList: IProcess[] = [...this.$processList.getValue()];
+        this.$processList.next(
+          processList.map((p) => {
+            if (p.id !== process.id) {
+              return p;
+            }
+            return newProc;
+          })
+        );
+
+        this.$processError.next(ERROR.PROCESS_ORDER_SAVED)
+      },
+      error: (err) => {
+        console.error(err);
+        this.$processError.next(ERROR.PROCESSES_HTTP_ERROR)
+      }
+    })
+  }
 }

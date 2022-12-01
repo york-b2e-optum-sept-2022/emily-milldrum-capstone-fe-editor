@@ -51,20 +51,35 @@
 
 
   <ng-container *ngIf="process !== null">
+
+<!--    <button class="btn btn-light" (click)="reorderStages()">Reorder Stages</button>-->
+
+<!--    <div *ngIf="stageReordering" cdkDropList class="example-list me-5 ms-5" (cdkDropListDropped)="drop($event)">-->
+<!--    <app-stage-input *ngFor="let stages of stageListExisting"-->
+<!--                     [stage]="stages" cdkDrag>-->
+<!--    </app-stage-input>-->
+<!--    </div>-->
+<!---->
+<!--    <ng-container *ngIf="!stageReordering">-->
     <app-stage-input *ngFor="let stages of stageListExisting"
                      [stage]="stages">
     </app-stage-input>
+<!--    </ng-container>-->
   </ng-container>
 
 
 <!--  render stages being created-->
   <ng-container *ngIf="stageListCreate !== null">
+    <div cdkDropList class="example-list me-5 ms-5" (cdkDropListDropped)="drop($event)">
     <app-stage-input *ngFor="let stages of stageListCreate"
-                     [stage]="stages">
+                     [stage]="stages" cdkDrag>
+
     </app-stage-input>
+    </div>
   </ng-container>
 
   <div class="centering" id="error-message">{{errorMessage}}</div>
+  <button class="btn btn-light" (click)="saveOrder()">Save Reorder</button>
 
   <ng-container *ngIf="!process">
     <button class="btn btn-light" (click)="onCreateProcess()">Create</button>
